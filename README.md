@@ -31,7 +31,7 @@ Browser URL
 
 | ID | Dashboard | Status | Server | Runtime owner | GitHub source |
 |---|---|---|---|---|---|
-| D01 | [NIFTY Paper Research](docs/D01-nifty-paper-research.md) | **PROVEN** | `chartink-paper` | `/opt/chartink-paper/nifty-options-v2` | `kriskingg/etf-invest-engine` / `chatgpt/statistical-options-buying-basket-v1` |
+| D01 | [NIFTY Paper Research](docs/D01-nifty-paper-research.md) ([full code/runtime architecture](docs/D01-CODE-AND-RUNTIME-ARCHITECTURE.md)) | **PROVEN** | `chartink-paper` | `/opt/chartink-paper/nifty-options-v2` | `kriskingg/etf-invest-engine` / `chatgpt/statistical-options-buying-basket-v1` |
 | D02 | MCX / Silver Hedge dashboard | Pending full ownership record | `chartink-paper` | Known to involve `hedge-engine`; document separately | Pending |
 | D03 | ETF dashboard `/` | Pending | Pending | Pending | Pending |
 | D04 | ETF dashboard `/v2/` | Pending | Pending | Pending | Pending |
