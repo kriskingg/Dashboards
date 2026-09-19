@@ -4,7 +4,7 @@
 
 This is the single operational map for the four dashboard URLs currently in use or under investigation. It separates **URL**, **network exposure**, **server**, **port**, **serving process**, **generator/source code**, **persistent data**, **reboot behavior**, **server-loss behavior**, and **cleanup status**.
 
-## Four URLs, two servers, three known application owners
+## Four URLs, two OCI hosts, three known application owners
 
 | ID | URL | Purpose | Server | External access | Local origin | Generator/source owner | Current confidence |
 |---|---|---|---|---|---|---|---|
@@ -15,7 +15,7 @@ This is the single operational map for the four dashboard URLs currently in use 
 
 The four URLs do **not** represent four independent strategy engines.
 
-## Server A — chartink-paper research server
+## chartink-paper — research host
 
 ```text
 Hostname:        chartink-paper
@@ -98,7 +98,7 @@ Every tracked runtime file matched the deployed Git HEAD during the 2026-09-19 a
 
 The historical `mcx-paper-live.service` exists but is disabled/inactive.
 
-## Server B — live ETF/Kotak server
+## lakshmidevi — live ETF/Kotak host
 
 Documented identity:
 
@@ -150,7 +150,7 @@ D03 must therefore be treated as a production operator surface, not as a researc
 
 The hostname alone does not prove route ownership.
 
-Still to determine from Server B:
+Still to determine from `lakshmidevi`:
 
 ```text
 /v2/ is one of:
@@ -268,7 +268,7 @@ Git protects source code, not these mutable runtime directories. A separate off-
 
 A normal reboot and total VM loss are different events.
 
-### Server A reboot
+### chartink-paper reboot
 
 Known:
 - `nifty-multi-shadow-dashboard.service` is enabled;
@@ -282,7 +282,7 @@ Still to prove:
 
 Do not treat the current Quick Tunnel URL as a durable disaster-recovery address.
 
-### Server B reboot
+### lakshmidevi reboot
 
 Repository design says:
 - live ETF strategy scheduling is cron/systemd based;
@@ -290,7 +290,7 @@ Repository design says:
 - dashboard launcher is `scripts/start_dashboard.sh`;
 - startup must fail closed rather than create a public fallback.
 
-Fresh Server-B proof is still required for:
+Fresh `lakshmidevi` proof is still required for:
 - exact reboot/autostart mechanism of the Uvicorn dashboard;
 - current Tailscale Serve state after reboot;
 - D04 route behavior.
@@ -321,7 +321,7 @@ Some duplication is intentional; some is historical.
 4. NIFTY uses a hybrid untracked runtime tree while its checkout HEAD is old.
 5. `/v2/` may duplicate or obsolete part of D03; not yet proven.
 6. `etf-invest-engine` contains both the live ETF production system on `main` and separate NIFTY research work on other branches, making repo-name-only ownership ambiguous.
-7. two untracked hedge-engine deployment tarballs were observed on Server A.
+7. two untracked hedge-engine deployment tarballs were observed on `chartink-paper`.
 
 ## Cleanup policy
 
@@ -332,9 +332,9 @@ Cleanup is allowed only after dependency proof.
 ### Phase 1 — complete mapping
 
 Pending:
-- fresh Server-B runtime/route audit;
+- fresh `lakshmidevi` runtime/route audit;
 - D04 ownership;
-- Server-B restart/autostart proof;
+- `lakshmidevi` restart/autostart proof;
 - Cloudflare control-endpoint authentication review;
 - off-server backup/restore matrix for all local mutable data.
 
