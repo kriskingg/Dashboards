@@ -38,12 +38,16 @@ Approved personal device
 |---|---|
 | Repository | `kriskingg/etf-invest-engine` |
 | Intended production authority | `main` |
+| Current GitHub `main` HEAD re-verified 2026-09-19 | `e52aa2ab7f8d4a260027778982b6abfe69203225` |
+| Current GitHub feature-branch HEAD re-verified 2026-09-19 | `b2def17c7746656ede1a9514551fe276a21e7c40` |
 | Runtime checkout | `/home/ubuntu/kotak` |
 | Observed deployed branch on 2026-09-19 | `platform-v2-v03-preimplementation-20260916` |
 | Observed deployed HEAD | `306bd5c20dc48c682dab8c85ce1b2c677f97f66a` |
 | Application | `src.dashboard.app_pro:app` |
 
 ## Critical branch/deployment warning
+
+The GitHub feature branch has advanced beyond the last observed deployed HEAD below. Treat the deployed `306bd5c...` value as timestamped server evidence, not the current GitHub branch tip. Re-audit the host before any deployment-sensitive conclusion.
 
 The live checkout was observed on a feature/preimplementation branch while the weekday 08:57 IST deployment cron performs:
 
