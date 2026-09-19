@@ -202,12 +202,25 @@ dashboard.py Git blob at current branch head f9a8fe8:
 a6757e3087e643b0ac75f41ce993e371b3aac35b
 ```
 
-The fresh shell output did not print the Git blob hash of the untracked runtime `dashboard.py`, so one final command is required to prove whether the live runtime file is exactly the current GitHub `a6757e...` version.
+A final direct runtime blob check proved:
+
+```text
+runtime dashboard.py blob:
+a6757e3087e643b0ac75f41ce993e371b3aac35b
+
+current GitHub branch dashboard.py blob:
+a6757e3087e643b0ac75f41ce993e371b3aac35b
+```
+
+Therefore the live runtime `dashboard.py` is exactly the current GitHub version from branch head `f9a8fe8...`.
+
+GitHub comparison between deployed checkout HEAD `97f51a8...` and current branch head `f9a8fe8...` shows only two changed files: `dashboard.py` and `test_nifty_dashboard_v2.py`. The test file is outside the runtime source tree. Since the full recursive server comparison found only `dashboard.py` different from the old tracked runtime source, and that runtime file exactly matches current GitHub, the deployed NIFTY runtime source tree is effectively current for the executable NIFTY application code.
 
 ### D01 confidence
 
 ```text
-PROVEN_WITH_RUNTIME_DRIFT
+RUNTIME_SOURCE_PROVEN_CURRENT
+CHECKOUT_METADATA_STALE
 ```
 
 Proven:
@@ -219,12 +232,12 @@ Proven:
 - branch identity;
 - most critical runtime files byte-identical to deployed tracked source.
 
-Drift:
-- checkout HEAD is behind current GitHub branch HEAD;
-- runtime `dashboard.py` differs from the tracked source in the server checkout.
+Deployment-layout drift:
+- checkout HEAD remains `97f51a8...`, behind current GitHub branch head `f9a8fe8...`;
+- the executable runtime tree is an untracked top-level `analysis/` copy;
+- that runtime tree contains the current `dashboard.py` even though the tracked checkout copy remains old.
 
-Pending:
-- fresh Git blob comparison for runtime `dashboard.py` against current GitHub blob `a6757e...`.
+This is not evidence of stale executable NIFTY source; it is evidence of a hybrid deployment layout whose Git metadata does not describe the actual runtime tree cleanly. Do not run destructive Git cleanup.
 
 ## 4. D02 — MCX / Silver hedge runtime
 
@@ -382,7 +395,16 @@ Result:
 SYSTEMD_UNIT_COMPARE=DIFFERENT
 ```
 
-The rendered `systemctl cat` output appears semantically aligned with the tracked unit, but the files are not byte-identical. A direct diff/cmp is still required to identify the exact byte-level reason.
+The final direct diff proved the content is semantically identical and differs only by line endings:
+
+```text
+repository file: LF
+installed unit:  CRLF
+```
+
+The first byte difference occurs where the repository has LF (`0x0A`) and the installed unit has CRLF (`0x0D 0x0A`). The unified diff shows every logical line unchanged.
+
+Therefore the systemd discrepancy is **non-semantic line-ending drift only**.
 
 ### D02 confidence
 
@@ -395,16 +417,16 @@ PROVEN_BYTE_IDENTICAL
 Installed service definition:
 
 ```text
-PROVEN_WITH_RUNTIME_DRIFT
+SEMANTICALLY_IDENTICAL_CRLF_ONLY
 ```
 
 Overall D02:
 
 ```text
-PROVEN_WITH_RUNTIME_DRIFT
+PROVEN_CURRENT_RUNTIME
 ```
 
-The application source is exact and current. The remaining drift is the installed systemd unit file versus its repository copy.
+The application source is exact and current. The installed systemd unit differs only in LF versus CRLF line endings, with no logical configuration difference.
 
 ## 5. Cross-dashboard conclusion
 
@@ -433,11 +455,17 @@ https://triumph-events-chair-problems.trycloudflare.com
 
 No evidence from this audit supports treating the shared HTTP/control server as the generator owner of both applications.
 
-## 6. Remaining Server-1 checks
+## 6. Server-1 audit closure
 
-Only two narrow byte-level questions remain:
+All requested Server-1 provenance questions are now resolved.
 
-1. compute the Git blob hash of runtime NIFTY `dashboard.py` and compare it with current GitHub blob `a6757e3087e643b0ac75f41ce993e371b3aac35b`;
-2. produce a direct byte/text diff between the installed and repository `hedge-engine-paper.service` files.
+D01:
+- executable NIFTY runtime source is proven current for the application runtime tree;
+- checkout metadata remains stale/hybrid at `97f51a8...`, so deployment hygiene is imperfect but runtime code ownership is established.
 
-No deployment or restart is required for either check.
+D02:
+- tracked hedge-engine runtime source is byte-identical to current GitHub `main`;
+- generated primary and published MCX pages matched byte-for-byte;
+- installed systemd unit differs only by CRLF versus LF line endings.
+
+No further Server-1 verification is required for dashboard ownership mapping.
