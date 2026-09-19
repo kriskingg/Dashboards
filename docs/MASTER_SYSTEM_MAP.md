@@ -404,6 +404,16 @@ The account-wide 2026-09-19 scan identified two additional confirmed dashboards:
 Neither dashboard currently has a proven dependency on `lakshmidevi` or
 `chartink-paper`.
 
+D05 was migrated on 2026-09-19 from the legacy `D:\\Dhan\\Mutual_funds`
+workspace into the canonical physical Git workspace
+`D:\\Git_repos\\mf-analytics-source`. The destination is a real directory,
+not a junction. Repository HEAD remained
+`5366b9000d0f93af8e4e635b4fc551f0a85d0915`; tracked D05 content compared
+old-versus-new with zero differences; the rebuilt `.venv` resolves under the
+new canonical path; FastAPI `:8000/docs` and Vite `:5173` both returned HTTP
+200. The temporary migration backups are safety copies only and are not runtime
+authorities. See [D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md](D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md).
+
 See [ACCOUNT_WIDE_UI_SCAN_2026-09-19.md](ACCOUNT_WIDE_UI_SCAN_2026-09-19.md).
 
 ## Dashboard code/repository decision control
