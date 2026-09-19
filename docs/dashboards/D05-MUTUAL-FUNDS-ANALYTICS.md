@@ -120,6 +120,8 @@ Combined PR #2 was validated before merge with:
 The merged authority is now `main` at
 `d25165a31e8a64e8f9814f0f58aa8366ffce2a0c`.
 
+The canonical local checkout `D:\\Git_repos\\mf-analytics-source` was subsequently switched to `main`, fast-forwarded to the same SHA, passed `git diff --check`, and returned zero tracked `D:\\Dhan\\Mutual_funds` references.
+
 ## End-to-end local path
 
 ```text
