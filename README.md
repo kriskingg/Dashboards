@@ -31,8 +31,8 @@ Browser URL
 
 | ID | Dashboard | Status | Server | Runtime owner | GitHub source |
 |---|---|---|---|---|---|
-| D01 | [NIFTY Paper Research](docs/D01-nifty-paper-research.md) ([full code/runtime architecture](docs/D01-CODE-AND-RUNTIME-ARCHITECTURE.md)) | **PROVEN WITH RUNTIME DRIFT** | `chartink-paper` / `80.225.234.65` | `/opt/chartink-paper/nifty-options-v2` | `kriskingg/etf-invest-engine` / `chatgpt/statistical-options-buying-basket-v1` |
-| D02 | [MCX / Silver Hedge Research](docs/D02-mcx-silver-hedge.md) | **PROVEN WITH SYSTEMD DRIFT** | `chartink-paper` / `80.225.234.65` | `/opt/hedge-engine` | `kriskingg/hedge-engine` / `main` |
+| D01 | [NIFTY Paper Research](docs/D01-nifty-paper-research.md) ([full code/runtime architecture](docs/D01-CODE-AND-RUNTIME-ARCHITECTURE.md)) | **RUNTIME SOURCE CURRENT; CHECKOUT HEAD STALE** | `chartink-paper` / `80.225.234.65` | `/opt/chartink-paper/nifty-options-v2` | `kriskingg/etf-invest-engine` / `chatgpt/statistical-options-buying-basket-v1` |
+| D02 | [MCX / Silver Hedge Research](docs/D02-mcx-silver-hedge.md) | **PROVEN CURRENT RUNTIME** | `chartink-paper` / `80.225.234.65` | `/opt/hedge-engine` | `kriskingg/hedge-engine` / `main` |
 | D03 | ETF dashboard `/` | Runtime verification pending | `lakshmidevi` / `141.148.219.153` | expected `/home/ubuntu/kotak` | `kriskingg/etf-invest-engine` / `main` |
 | D04 | ETF dashboard `/v2/` | Route ownership pending | `lakshmidevi` / `141.148.219.153` | pending runtime proof | pending runtime proof |
 
