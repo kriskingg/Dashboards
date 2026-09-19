@@ -30,13 +30,13 @@ screeners, comparison tools and interactive charting.
 |---|---|
 | Repository | `kriskingg/mf-analytics-source` |
 | Branch | `main` |
-| HEAD verified 2026-09-19 | `5366b9000d0f93af8e4e635b4fc551f0a85d0915` |
+| HEAD verified after D05 consolidation | `d25165a31e8a64e8f9814f0f58aa8366ffce2a0c` |
 | Frontend root | `app/frontend/` |
 | Backend root | `app/backend/` |
 | Startup scripts | `app/scripts/` |
 | Preserved local-source branch | `preserve/d05-local-source-20260919` |
 | Preserved local-source commit | `478e7a018ba0d587915445d4f7decfb056c63a0d` |
-| Path-cleanup work | PR #1, branch `chatgpt/d05-path-cleanup-20260919`; pending integration/testing, not yet `main` |
+| Path-cleanup work | Integrated through combined PR #2; merged into `main` |
 
 ## 2026-09-19 local migration verification
 
@@ -52,7 +52,7 @@ Verified after migration:
 - `D:\Git_repos` is a real Windows directory, not a junction/reparse-point alias;
 - repository remote remains `https://github.com/kriskingg/mf-analytics-source.git`;
 - branch remains `main`;
-- HEAD remains `5366b9000d0f93af8e4e635b4fc551f0a85d0915`;
+- pre-integration migration baseline was `5366b9000d0f93af8e4e635b4fc551f0a85d0915`; final merged `main` is `d25165a31e8a64e8f9814f0f58aa8366ffce2a0c`;
 - all old-source files were present in the new destination during migration verification;
 - D05 tracked-file old-versus-new comparison reported **0 differences**;
 - `.venv` was rebuilt so `sys.executable` and `sys.prefix` resolve under `D:\Git_repos\mf-analytics-source`;
@@ -97,11 +97,28 @@ Local only
   -> ZIPs/backups/generated results
 ```
 
-The path-cleanup work in PR #1 is intentionally still separate from the preservation commit. The next gate is to integrate both histories, resolve any overlap deliberately, run backend/frontend validation, verify old-path references are gone, and only then merge to `main`.
+The preservation and path-cleanup histories were combined on `chatgpt/d05-integration-20260919`, validated locally, reviewed through combined PR #2, and merged to `main` at `d25165a31e8a64e8f9814f0f58aa8366ffce2a0c`. PR #1 is superseded by that merge. No preservation/integration branch was deleted.
 
 Deep evidence: [../D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md](../D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md).
 
 Session continuation / turnover: [../D05_SESSION_TURNOVER_2026-09-19.md](../D05_SESSION_TURNOVER_2026-09-19.md).
+
+## Final consolidation validation
+
+Combined PR #2 was validated before merge with:
+
+- backend non-runtime suite: 197 passed, 24 intentionally skipped;
+- lifecycle/runtime suite: 3 passed;
+- frontend production build: PASS;
+- frontend lint: 0 errors, 19 warnings;
+- tracked legacy path references: zero;
+- runtime legacy path references: zero;
+- backend 8000: HTTP 200;
+- frontend 5173: HTTP 200;
+- working tree after validation: clean.
+
+The merged authority is now `main` at
+`d25165a31e8a64e8f9814f0f58aa8366ffce2a0c`.
 
 ## End-to-end local path
 
@@ -215,13 +232,14 @@ app/scripts/install_startup_task.ps1
 They define startup-at-logon and a daily update task, but the script defaults to
 preview mode unless explicitly installed.
 
-## Documentation discrepancy to remember
+## Port/documentation status
 
-The master README describes a FastAPI backend on port `8010`, while the current
-startup script launches port `8000`.
+The former README/runtime discrepancy is resolved. The merged source, startup
+script, frontend API client and Vite proxy consistently use backend port `8000`.
+The frontend remains on `5173`.
 
-For runtime work, verify the actual local process/start script before assuming
-either number. Code/runtime evidence overrides prose.
+Runtime verification after integration returned HTTP 200 on both
+`http://127.0.0.1:8000/docs` and `http://127.0.0.1:5173`.
 
 ## Data dependencies
 
