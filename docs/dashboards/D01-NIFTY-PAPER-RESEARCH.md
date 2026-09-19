@@ -39,6 +39,7 @@ The HTTP server only serves the generated page. It is **not** the NIFTY strategy
 |---|---|
 | Git repository | `kriskingg/etf-invest-engine` |
 | Active NIFTY branch | `chatgpt/statistical-options-buying-basket-v1` |
+| Current GitHub branch HEAD re-verified 2026-09-19 | `6a37957bf29f45c99b79e537f4698fbcdcca3f66` |
 | Authoritative subtree | `nifty-options-paper-research/` |
 | Runtime checkout | `/opt/chartink-paper/nifty-options-v2` |
 | Deployment condition | hybrid/stale checkout metadata; executable dashboard source was proven current at audit time |
