@@ -12,7 +12,7 @@ facts already proven from questions that still require evidence.
 | Host | Public IP | Status |
 |---|---|---|
 | `lakshmidevi` | `141.148.219.153` | mapped |
-| `chartink-paper` | `80.225.234.65` | mapping/security/durability audit in progress |
+| `chartink-paper` | `80.225.234.65` | runtime/security audit substantially complete; two durability inputs remain |
 
 Do not use ordinal labels such as "Server 1" or "Server 2" in current
 documentation. Historical filenames may retain those terms where renaming would
@@ -86,31 +86,56 @@ destroy provenance; current prose should identify the host explicitly.
       `nifty-multi-shadow.service`,
       `nifty-options-v2-replay.service`.
 
-### Final evidence still required from chartink-paper
+### Final evidence status from chartink-paper
 
-The uploaded deep-audit transcript begins after the early audit sections, so the
-following evidence must be recollected in a small targeted read-only pass:
+- [x] `cloudflared-tunnel.service` is enabled, active, `Restart=always`, and
+      starts a Quick Tunnel to `127.0.0.1:8765`.
+- [x] Current Quick Tunnel hostname observed:
+      `triumph-events-chair-problems.trycloudflare.com`.
+- [x] Cloudflare documentation confirms Quick Tunnels generate random
+      `trycloudflare.com` subdomains and are intended for testing/development;
+      the hostname must not be treated as durable across a new cloudflared
+      process/reboot.
+- [x] `mcx_paper.control_server` exposes GET and POST on
+      `/api/mcx-paper-control`.
+- [x] POST changes the control file through `atomic_control()`.
+- [x] POST protection observed is a fixed
+      `X-Paper-Control: local-dashboard` value plus an Origin check; no
+      secret/token authentication identifier was detected. Treat this as a
+      security gap, not strong authentication.
+- [x] The same public Quick Tunnel serves `live_latest.html` and
+      `mcx_latest.html` with HTTP 200 and proxies the control server origin.
+- [x] Public response headers include `Referrer-Policy: no-referrer` and
+      `X-Frame-Options: DENY`.
+- [x] `nifty-multi-shadow.service` is an active timer target and has failed on
+      Sep 15-18 with SQLite `unable to open database file`; this is an
+      operational defect until fixed.
+- [x] `nifty-options-v2-replay.timer` is enabled while its service has failed
+      Sep 15-18 with systemd `203/EXEC`; classify as broken scheduled path
+      until dependency review proves it can be retired.
+- [x] Evidence exporter is actively scheduled and successfully verifies older
+      COMPLETE packets, but its Sep 18 run failed because eight recent sessions
+      produced no manifest; recent off-VM evidence delivery is therefore not
+      healthy.
+- [x] MCX mutable data inventory captured under `/var/lib/hedge-engine`.
+- [x] All audited roots are on the VM's root ext4 filesystem
+      (`/dev/sda1`), so local state is boot-volume state.
+- [x] Live process -> mutable path ownership captured for control server and
+      hedge-engine paper loop.
+- [x] Documented Object Storage/laptop backup cadence is not evidenced by a
+      scheduled server-side backup job.
 
-- [ ] Exact `cloudflared-tunnel.service` unit/startup/restart/enable state.
-- [ ] Quick Tunnel hostname history across retained boots/logs; determine whether
-      reboot/restart creates a new hostname.
-- [ ] Exact `mcx_paper.control_server` HTTP methods/routes.
-- [ ] Exact authentication/authorization checks on control endpoints.
-- [ ] Determine whether mutating control endpoints are reachable through the
-      public Quick Tunnel and what rejects unauthorized requests.
-- [ ] Capture safe local/public GET response evidence and security headers.
-- [ ] Capture exact status/result/journal failure reason for the three currently
-      failed NIFTY units; classify each as active bug, expected one-shot outcome,
-      or legacy residue.
-- [ ] Capture complete mutable-data root sizes, current important-file inventory,
-      recent-write ordering and SQLite schemas in strict read-only mode.
-- [ ] Map live process -> currently open mutable files.
-- [ ] Confirm mounted filesystem for all mutable roots.
-- [ ] Determine whether OCI control-plane backups exist using an external OCI
-      control-plane check if host-local proof remains unavailable.
-- [ ] Determine whether documented Object Storage/laptop backup cadence is
-      actually implemented; documentation alone is not proof.
-- [ ] Determine restore-tested status for every dataset.
+### Remaining inputs before final durability closure
+
+- [ ] Resolve the physical targets behind `/var/lib/chartink-paper/*`.
+      The root reports only 4 KiB while live processes use subpaths, strongly
+      indicating symlinked runtime roots; the previous `find` inventory did
+      not follow them. Capture the symlink targets and sizes before claiming a
+      complete NIFTY mutable-data inventory.
+- [ ] Verify OCI boot-volume backup policy/existing backups from the OCI control
+      plane. The host has no OCI CLI and cannot prove this itself.
+- [ ] Record whether an actual restore drill has ever been completed for the
+      NIFTY raw SQLite and MCX mutable runtime state.
 
 ## Final deliverables after evidence closure
 

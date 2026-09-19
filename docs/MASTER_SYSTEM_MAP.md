@@ -201,7 +201,7 @@ The serving process also has a paper-control argument:
 --control /var/lib/chartink-paper/mcx-paper/control.json
 ```
 
-The exact HTTP control endpoints and their authentication still need a targeted read-only security review. Do not assume "paper only" makes a publicly exposed control surface harmless.
+Fresh source audit proved GET and POST on `/api/mcx-paper-control`. POST mutates the control file and is protected only by a fixed `X-Paper-Control: local-dashboard` header plus an Origin check; no secret/token authentication was detected. Because the same Quick Tunnel exposes this HTTP origin publicly, treat the control surface as a **security remediation blocker**. No mutating request was executed during the audit.
 
 ### D03/D04 ETF URLs
 
@@ -262,14 +262,23 @@ Repository operations documentation currently describes bounded retention. These
 
 ### NIFTY paper-research data
 
-Known local roots include:
+Logical runtime roots include:
 
 ```text
 /var/lib/chartink-paper/nifty-options-v2/
 /var/lib/chartink-paper/nifty-multi-shadow/
+/var/lib/chartink-paper/evidence-repo/
+/var/lib/chartink-paper/mcx-paper/
 ```
 
-Git protects source; forward evidence publication protects selected completed evidence packets; raw recorder/runtime data on OCI still needs an explicit off-server recovery policy if it must survive total disk loss.
+A final-gap audit showed the parent `/var/lib/chartink-paper` consuming only
+4 KiB while live processes successfully use those child paths. The prior
+non-following inventory therefore did not enumerate the physical NIFTY data;
+resolve the symlink targets before claiming a complete disk-size/file matrix.
+
+Git protects source and the evidence exporter protects selected COMPLETE packets.
+The exporter is currently unhealthy for several recent sessions, so recent
+off-VM evidence coverage must not be assumed.
 
 ### MCX hedge-engine data
 
@@ -296,11 +305,16 @@ Known:
 - NIFTY live engine is timer-triggered;
 - old `mcx-paper-live.service` is disabled.
 
-Still to prove:
-- exactly how `cloudflared` is recreated after a full reboot;
-- whether the Quick Tunnel retains or changes its hostname.
+Freshly proven:
+- `cloudflared-tunnel.service` is enabled, active and `Restart=always`;
+- it launches `cloudflared tunnel --url http://127.0.0.1:8765`;
+- this is a Cloudflare Quick Tunnel, which Cloudflare documents as generating a
+  random `trycloudflare.com` subdomain and being intended for
+  testing/development.
 
-Do not treat the current Quick Tunnel URL as a durable disaster-recovery address.
+Therefore cloudflared itself is configured to return after reboot, but the
+current Quick Tunnel hostname is **not a durable address** and should be expected
+to change when a fresh cloudflared process creates a new Quick Tunnel.
 
 ### lakshmidevi reboot
 
@@ -360,8 +374,12 @@ Pending:
   to `origin/main`;
 - design/test deliberate D03/D04 reboot autostart;
 - compare D03 and D04 feature coverage before any route retirement;
-- Cloudflare control-endpoint authentication review on `chartink-paper`;
-- off-server backup/restore matrix and restore testing for all local mutable data.
+- remediate/separate the Internet-facing chartink-paper control endpoint;
+- resolve the physical targets behind `/var/lib/chartink-paper/*`;
+- classify/fix or formally retire the two broken scheduled NIFTY replay paths;
+- repair recent forward-evidence delivery;
+- verify OCI boot-volume backup policy;
+- complete off-server backup/restore matrix and restore testing for all local mutable data.
 
 ### Phase 2 — dependency graph
 

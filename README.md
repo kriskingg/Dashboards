@@ -41,6 +41,8 @@ two-host, code/data/recovery/security/cleanup view.
 
 Track audit progress and outstanding evidence in [INFRASTRUCTURE_AUDIT_CHECKLIST.md](docs/INFRASTRUCTURE_AUDIT_CHECKLIST.md).
 
+See [TWO_HOST_DURABILITY_MATRIX_2026-09-19.md](docs/TWO_HOST_DURABILITY_MATRIX_2026-09-19.md) for the current reboot/VM-loss/backup/restore matrix.
+
 Fresh `chartink-paper` evidence is in [CHARTINK_PAPER_RUNTIME_VERIFICATION_2026-09-19.md](docs/CHARTINK_PAPER_RUNTIME_VERIFICATION_2026-09-19.md).
 
 Fresh `lakshmidevi` evidence is in [LAKSHMIDEVI_RUNTIME_VERIFICATION_2026-09-19.md](docs/LAKSHMIDEVI_RUNTIME_VERIFICATION_2026-09-19.md).
