@@ -367,42 +367,61 @@ https://etf-trader.tailabfd53.ts.net/v2/
 
 ### D05 — Mutual Funds Analytics / Tactical Research
 
-Repository:
-https://github.com/kriskingg/mf-analytics-source
-
-Main application:
-https://github.com/kriskingg/mf-analytics-source/blob/main/app/frontend/src/App.tsx
-
-Backend composition:
-https://github.com/kriskingg/mf-analytics-source/blob/main/app/backend/app/main.py
-
-Portable startup:
-https://github.com/kriskingg/mf-analytics-source/blob/main/app/scripts/start_platform.ps1
-
-Canonical Windows workspace:
-```text
-D:\Git_repos\mf-analytics-source
-```
-
-Local URI:
-```text
-file:///D:/Git_repos/mf-analytics-source/
-```
-
-Backend:
-```text
-http://127.0.0.1:8000
-```
-
-Frontend:
-```text
-http://127.0.0.1:5173
-```
+Canonical page:
+https://github.com/kriskingg/Dashboards/blob/main/docs/dashboards/D05-MUTUAL-FUNDS-ANALYTICS.md
 
 Dedicated D05 turnover:
 https://github.com/kriskingg/Dashboards/blob/main/docs/D05_SESSION_TURNOVER_2026-09-19.md
 
-### D06 — Personal Investment Tracker
+Migration verification:
+https://github.com/kriskingg/Dashboards/blob/main/docs/D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md
+
+Source repository:
+https://github.com/kriskingg/mf-analytics-source
+
+Critical repository guard:
+**D05 is not in `etf-invest-engine`.**
+
+Canonical local workspace:
+`D:\Git_repos\mf-analytics-source`
+
+Current GitHub refs:
+- `main`: `5366b9000d0f93af8e4e635b4fc551f0a85d0915`;
+- preserved local source: `478e7a018ba0d587915445d4f7decfb056c63a0d`;
+- path-cleanup branch: `a7bd4c0903867f6b5e4d378a502f27480c3813fe`;
+- combined integration branch: `chatgpt/d05-integration-20260919`, current head `48ebe6f1f9e2bdfffbbb9356e58ff9e5a362abac`.
+
+Open path-cleanup PR:
+https://github.com/kriskingg/mf-analytics-source/pull/1
+
+Current D05 integration status:
+- preservation + path-cleanup are already combined on `chatgpt/d05-integration-20260919`;
+- deliberate overlap resolution is complete;
+- frontend/backend runtime references are aligned to canonical backend port 8000;
+- tracked legacy path check for `D:\Dhan\Mutual_funds` is zero;
+- `git diff --check` is clean after whitespace corrections;
+- focused preservation regressions passed 9/9 locally;
+- an initial full backend run completed with 197 passed, 24 skipped, and 3 failures; all three were diagnosed as test-environment/staleness defects rather than production-algorithm failures;
+- updater tests are now isolated from normal AMFI/database mutation paths;
+- lifecycle test now derives the canonical repository path dynamically;
+- Market Direction test no longer pins the dynamic clean-equity universe to stale count 817;
+- backend test dependencies are now declared in `app/backend/requirements-test.txt`.
+
+Pending D05 work:
+- pull the latest integration head locally and rerun the full backend suite;
+- run frontend production build and lint;
+- runtime smoke-test ports 8000/5173 and verify no legacy runtime path;
+- create/review the combined PR only after those validation gates pass;
+- merge only after code/test/runtime review;
+- close/supersede PR #1 only after the combined PR is safely merged;
+- update Dashboards with final merged SHA and post-merge validation evidence;
+- keep migration backups until final acceptance.
+
+Do not merge PR #1 independently before the combined branch is validated.
+
+---
+
+# D06 — Personal Investment Tracker
 
 Repository:
 https://github.com/kriskingg/investment-tracker-app
