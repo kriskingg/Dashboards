@@ -31,8 +31,8 @@ This document is the master end-to-end ownership table. Each dashboard gets a de
 | GitHub dashboard blob hash | `a6757e3087e643b0ac75f41ce993e371b3aac35b` |
 | Runtime live blob hash | `4a4db2288563374e4fed4e9d8e6d6a3cb7ed138a` |
 | GitHub live blob hash | `4a4db2288563374e4fed4e9d8e6d6a3cb7ed138a` |
-| Ownership confidence | **PROVEN** |
-| Verified | 2026-09-18 |
+| Ownership confidence | **PROVEN_WITH_RUNTIME_DRIFT** |
+| Fresh runtime verification | 2026-09-19 |
 
 ### Important nuance
 
@@ -80,9 +80,12 @@ Do not treat the common Cloudflare hostname or common port 8765 as evidence that
 | GitHub renderer blob | `faf62c3ad8c26aa6bbdc6f9aed01a44bfa316d66` |
 | GitHub renderer-core blob | `e2d997e7a5f8300d5fce0d756f024dc02afe481b` |
 | Source ownership confidence | **PROVEN** |
-| Current deployed OCI branch/HEAD | **NOT RE-VERIFIED IN THIS REVIEW** |
-| Runtime equivalence to latest GitHub main | **PENDING BYTE-FOR-BYTE SERVER CHECK** |
-| GitHub verification | 2026-09-19 |
+| Deployed OCI branch/HEAD | `main` / `e10eeeda6ea17a7a6c5bc62ad0877b01cf8ef071` |
+| Current GitHub main | `e10eeeda6ea17a7a6c5bc62ad0877b01cf8ef071` |
+| Tracked runtime source equivalence | **PROVEN_BYTE_IDENTICAL** |
+| Installed systemd unit | **DIFFERS FROM REPOSITORY UNIT** |
+| Overall runtime confidence | **PROVEN_WITH_RUNTIME_DRIFT** |
+| Fresh OCI verification | 2026-09-19 |
 
 ### Source-ownership conclusion
 
@@ -129,21 +132,13 @@ shared HTTP/control service
 
 A common hostname, port, HTTP server, or report directory does not imply common generator ownership.
 
-### Remaining OCI verification
+### Fresh OCI verification result
 
-Before marking D02 as fully runtime-proven, re-check on the server:
+The 2026-09-19 server audit proved all Git-tracked `/opt/hedge-engine` files byte-identical to deployed HEAD `e10eeeda...`, and GitHub `main` is at the same SHA. The primary and published `mcx_latest.html` copies were byte-identical when compared.
 
-```text
-/opt/hedge-engine Git remote
-deployed branch
-deployed HEAD
-hedge-engine-paper.service contents
-hashes of paper_loop.py / renderer.py / renderer_core.py
-mcx_latest.html freshness
-service active state
-```
+The only remaining D02 discrepancy is the installed `/etc/systemd/system/hedge-engine-paper.service`, whose SHA-256 differs from the repository service file. A direct diff is still needed to classify that difference as semantic or formatting-only.
 
-See [D02-mcx-silver-hedge.md](D02-mcx-silver-hedge.md) for the dedicated evidence record.
+See [D02-mcx-silver-hedge.md](D02-mcx-silver-hedge.md) and [SERVER1_RUNTIME_VERIFICATION_2026-09-19.md](SERVER1_RUNTIME_VERIFICATION_2026-09-19.md).
 
 ---
 
