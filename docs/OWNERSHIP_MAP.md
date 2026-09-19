@@ -31,7 +31,8 @@ This document is the master end-to-end ownership table. Each dashboard gets a de
 | GitHub dashboard blob hash | `a6757e3087e643b0ac75f41ce993e371b3aac35b` |
 | Runtime live blob hash | `4a4db2288563374e4fed4e9d8e6d6a3cb7ed138a` |
 | GitHub live blob hash | `4a4db2288563374e4fed4e9d8e6d6a3cb7ed138a` |
-| Ownership confidence | **PROVEN_WITH_RUNTIME_DRIFT** |
+| Runtime source confidence | **RUNTIME_SOURCE_PROVEN_CURRENT** |
+| Checkout metadata | **STALE/HYBRID — HEAD 97f51a8 while runtime dashboard.py matches f9a8fe8** |
 | Fresh runtime verification | 2026-09-19 |
 
 ### Important nuance
@@ -83,8 +84,8 @@ Do not treat the common Cloudflare hostname or common port 8765 as evidence that
 | Deployed OCI branch/HEAD | `main` / `e10eeeda6ea17a7a6c5bc62ad0877b01cf8ef071` |
 | Current GitHub main | `e10eeeda6ea17a7a6c5bc62ad0877b01cf8ef071` |
 | Tracked runtime source equivalence | **PROVEN_BYTE_IDENTICAL** |
-| Installed systemd unit | **DIFFERS FROM REPOSITORY UNIT** |
-| Overall runtime confidence | **PROVEN_WITH_RUNTIME_DRIFT** |
+| Installed systemd unit | **SEMANTICALLY IDENTICAL; CRLF-ONLY BYTE DIFFERENCE** |
+| Overall runtime confidence | **PROVEN_CURRENT_RUNTIME** |
 | Fresh OCI verification | 2026-09-19 |
 
 ### Source-ownership conclusion
@@ -136,7 +137,7 @@ A common hostname, port, HTTP server, or report directory does not imply common 
 
 The 2026-09-19 server audit proved all Git-tracked `/opt/hedge-engine` files byte-identical to deployed HEAD `e10eeeda...`, and GitHub `main` is at the same SHA. The primary and published `mcx_latest.html` copies were byte-identical when compared.
 
-The only remaining D02 discrepancy is the installed `/etc/systemd/system/hedge-engine-paper.service`, whose SHA-256 differs from the repository service file. A direct diff is still needed to classify that difference as semantic or formatting-only.
+The installed `/etc/systemd/system/hedge-engine-paper.service` differs from the repository copy only because the installed file uses CRLF line endings while the repository uses LF. The logical unit configuration is identical.
 
 See [D02-mcx-silver-hedge.md](D02-mcx-silver-hedge.md) and [SERVER1_RUNTIME_VERIFICATION_2026-09-19.md](SERVER1_RUNTIME_VERIFICATION_2026-09-19.md).
 
