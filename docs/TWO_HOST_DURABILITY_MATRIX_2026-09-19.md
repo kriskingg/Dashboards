@@ -49,10 +49,11 @@ chartink-paper durability inputs are resolved.
 | daily multi-shadow replay/report | `nifty-multi-shadow.service` | derived from raw SQLite | scheduled but **currently failing** | derived/reproducible if raw data survives | Sep 15-18 failed opening SQLite | No |
 | older NIFTY V2 replay | `nifty-options-v2-replay.timer/service` | derived | **currently broken** | unknown/likely reproducible | Sep 15-18 `203/EXEC` | No |
 
-**Physical-path warning:** the parent `/var/lib/chartink-paper` reports only
-4 KiB while active processes use child paths. The audit commands did not follow
-symlinked runtime roots, so the actual physical NIFTY data targets/sizes remain
-to be captured.
+**Inventory warning:** `/var/lib/chartink-paper` is mode `0700` and owned by
+`chartink-paper`. The follow-up command was run as `ubuntu`, which could not
+traverse the parent. Therefore the earlier 4 KiB result is not meaningful for
+NIFTY data size and does not prove symlinked paths. A complete raw/state
+inventory requires read-only root or `chartink-paper` execution.
 
 ## Chartink-paper — MCX / hedge-engine
 
@@ -82,8 +83,7 @@ treated as boot-volume state unless external copies are specifically proven.
 3. Daily NIFTY multi-shadow replay currently fails to open its SQLite input.
 4. NIFTY V2 replay timer triggers a service that exits `203/EXEC`.
 5. Recent forward-evidence delivery is incomplete/failing.
-6. Physical NIFTY runtime targets behind `/var/lib/chartink-paper/*` still need
-   resolution.
+6. Full NIFTY mutable-data inventory still needs privileged read-only traversal of the `0700` `/var/lib/chartink-paper` tree.
 7. OCI boot-volume backup policy/existing backups are still unknown.
 8. No tested replacement-VM restore was evidenced for raw NIFTY SQLite or MCX
    mutable runtime state.

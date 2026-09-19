@@ -39,6 +39,10 @@ Browser URL
 Start with [MASTER_SYSTEM_MAP.md](docs/MASTER_SYSTEM_MAP.md) for the four-URL,
 two-host, code/data/recovery/security/cleanup view.
 
+For implementation work, use [DASHBOARD_CODE_CHANGE_AND_OWNERSHIP_GUIDE.md](docs/DASHBOARD_CODE_CHANGE_AND_OWNERSHIP_GUIDE.md): it maps each dashboard to the exact source files, tests, generated artifacts, runtime and deployment boundary.
+
+For repository decisions, use [DASHBOARD_REPOSITORY_BOUNDARY_DECISIONS.md](docs/DASHBOARD_REPOSITORY_BOUNDARY_DECISIONS.md): it records what should stay, what should move, what should be split later, blockers, and why.
+
 Track audit progress and outstanding evidence in [INFRASTRUCTURE_AUDIT_CHECKLIST.md](docs/INFRASTRUCTURE_AUDIT_CHECKLIST.md).
 
 See [TWO_HOST_DURABILITY_MATRIX_2026-09-19.md](docs/TWO_HOST_DURABILITY_MATRIX_2026-09-19.md) for the current reboot/VM-loss/backup/restore matrix.
@@ -60,6 +64,8 @@ main`, is also the **live ETF/MTF production strategy branch**; it is not merely
 a dashboard codebase.
 
 This repository exists to prevent those classes of mistake.
+
+It is intentionally a **control/decision registry, not a runtime-code repository**. Source changes must be made in the owning domain repository identified in the code-change guide.
 
 ## Verification dates
 

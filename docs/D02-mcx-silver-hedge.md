@@ -253,3 +253,6 @@ PROVEN_CURRENT_RUNTIME
 ```
 
 See [CHARTINK_PAPER_RUNTIME_VERIFICATION_2026-09-19.md](CHARTINK_PAPER_RUNTIME_VERIFICATION_2026-09-19.md) for the complete byte-level audit record.
+## Code-change and repository decision guide
+
+For exact files/tests to modify for D02, plus repository migration/retention decisions, see [Dashboard Code Ownership, Change Guide and Repository Boundaries](DASHBOARD_CODE_CHANGE_AND_OWNERSHIP_GUIDE.md) and [Dashboard Repository Boundary Decision Register](DASHBOARD_REPOSITORY_BOUNDARY_DECISIONS.md).

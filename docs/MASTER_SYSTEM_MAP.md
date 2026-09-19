@@ -271,10 +271,12 @@ Logical runtime roots include:
 /var/lib/chartink-paper/mcx-paper/
 ```
 
-A final-gap audit showed the parent `/var/lib/chartink-paper` consuming only
-4 KiB while live processes successfully use those child paths. The prior
-non-following inventory therefore did not enumerate the physical NIFTY data;
-resolve the symlink targets before claiming a complete disk-size/file matrix.
+A final-gap audit run as `ubuntu` showed `/var/lib/chartink-paper` is mode
+`0700`, owned by `chartink-paper`. The `ubuntu` account therefore could
+not traverse the NIFTY runtime tree; the earlier 4 KiB result was an
+**audit-permission artifact**, not evidence of symlinks or missing data. A
+complete NIFTY mutable-data inventory must be collected as root or the
+`chartink-paper` service user if/when durability closure is required.
 
 Git protects source and the evidence exporter protects selected COMPLETE packets.
 The exporter is currently unhealthy for several recent sessions, so recent
@@ -375,7 +377,7 @@ Pending:
 - design/test deliberate D03/D04 reboot autostart;
 - compare D03 and D04 feature coverage before any route retirement;
 - remediate/separate the Internet-facing chartink-paper control endpoint;
-- resolve the physical targets behind `/var/lib/chartink-paper/*`;
+- complete the NIFTY mutable-data inventory using root/`chartink-paper` read access (the prior `ubuntu` audit could not traverse the 0700 parent);
 - classify/fix or formally retire the two broken scheduled NIFTY replay paths;
 - repair recent forward-evidence delivery;
 - verify OCI boot-volume backup policy;
@@ -389,6 +391,29 @@ For every suspected legacy component, identify:
 - dashboard links/API consumers;
 - rollback dependency;
 - last-use evidence.
+
+## Dashboard code/repository decision control
+
+The canonical implementation map is
+[DASHBOARD_CODE_CHANGE_AND_OWNERSHIP_GUIDE.md](DASHBOARD_CODE_CHANGE_AND_OWNERSHIP_GUIDE.md).
+The repository-boundary register is
+[DASHBOARD_REPOSITORY_BOUNDARY_DECISIONS.md](DASHBOARD_REPOSITORY_BOUNDARY_DECISIONS.md).
+
+Current architecture direction:
+
+```text
+Dashboards repo              -> documentation / ownership / decisions only
+NIFTY paper research         -> candidate dedicated repo
+MCX/Silver hedge + D02       -> keep hedge-engine
+Live ETF/Kotak + D03 backend -> keep etf-invest-engine
+Platform-v2 backend          -> keep ETF domain for now
+Platform-v2 React frontend   -> optional later split after stable API
+D01/D02 shared HTTP serving  -> candidate small read-only gateway
+MCX mutating control         -> remove from public shared origin / keep domain-private
+```
+
+The objective is not one repo per URL. It is one unambiguous domain authority
+with no duplicated safety/business logic.
 
 ### Phase 3 — proposed target architecture
 

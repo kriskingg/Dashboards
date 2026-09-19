@@ -370,3 +370,7 @@ matches current GitHub blob a6757e3087e643b0ac75f41ce993e371b3aac35b
 ```
 
 This proves current runtime code for the only application file changed between those two commits, but it also proves the server deployment is not a clean Git checkout representation. Future deployment work should preserve the working runtime while deliberately normalizing this layout; do not use `git reset --hard` or `git clean` as a shortcut.
+
+## Code-change and repository decision guide
+
+For exact files/tests to modify for D01, plus repository migration/retention decisions, see [Dashboard Code Ownership, Change Guide and Repository Boundaries](DASHBOARD_CODE_CHANGE_AND_OWNERSHIP_GUIDE.md) and [Dashboard Repository Boundary Decision Register](DASHBOARD_REPOSITORY_BOUNDARY_DECISIONS.md).

@@ -268,3 +268,7 @@ The older "zero state on disk" disaster-recovery statement in
 state is not disk-dependent**, not that the entire server is stateless.
 
 See [MASTER_SYSTEM_MAP.md](MASTER_SYSTEM_MAP.md).
+
+## Code-change and repository decision guide
+
+For exact files/tests to modify for D03, plus repository migration/retention decisions, see [Dashboard Code Ownership, Change Guide and Repository Boundaries](DASHBOARD_CODE_CHANGE_AND_OWNERSHIP_GUIDE.md) and [Dashboard Repository Boundary Decision Register](DASHBOARD_REPOSITORY_BOUNDARY_DECISIONS.md).
