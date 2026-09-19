@@ -38,6 +38,7 @@ Browser
 |---|---|
 | Git repository | `kriskingg/hedge-engine` |
 | Branch | `main` |
+| Current GitHub HEAD re-verified 2026-09-19 | `e10eeeda6ea17a7a6c5bc62ad0877b01cf8ef071` |
 | Runtime checkout | `/opt/hedge-engine` |
 | Runtime owner | `hedge-engine-paper.service` |
 | State root | `/var/lib/hedge-engine` |

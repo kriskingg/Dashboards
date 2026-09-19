@@ -42,6 +42,8 @@ D04 is not a second strategy engine.
 | Repository | `kriskingg/etf-invest-engine` |
 | Runtime checkout | `/home/ubuntu/kotak` |
 | Observed deployed branch | `platform-v2-v03-preimplementation-20260916` |
+| Current GitHub feature-branch HEAD re-verified 2026-09-19 | `b2def17c7746656ede1a9514551fe276a21e7c40` |
+| Last observed deployed HEAD | `306bd5c20dc48c682dab8c85ce1b2c677f97f66a` |
 | Frontend source | `web/src/` |
 | Backend source | `src/platform_v2/` |
 | Integration | `src/dashboard/app_pro.py`, `src/dashboard/spa.py` |

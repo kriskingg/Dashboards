@@ -2,6 +2,8 @@
 
 This directory contains one canonical decision page per confirmed dashboard. The current account-wide count is **6**.
 
+Cross-session handoff for all six dashboards: [../ALL_DASHBOARDS_SESSION_TURNOVER_2026-09-19.md](../ALL_DASHBOARDS_SESSION_TURNOVER_2026-09-19.md).
+
 Use these pages when the question is:
 
 - Which dashboard is this?

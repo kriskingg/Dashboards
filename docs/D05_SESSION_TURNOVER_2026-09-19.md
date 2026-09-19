@@ -18,6 +18,13 @@
 >
 > If a session starts by inspecting `kriskingg/etf-invest-engine`, stop that path immediately and switch to the two repositories above before making any claim or change.
 
+> **SCOPE NOTE**
+>
+> This page is D05-specific. For work spanning D01-D06, first read:
+> [ALL_DASHBOARDS_SESSION_TURNOVER_2026-09-19.md](ALL_DASHBOARDS_SESSION_TURNOVER_2026-09-19.md).
+>
+> There are currently **6 confirmed dashboards** in the central registry. Do not treat this D05 page as the handoff for D01-D04 or D06.
+
 ## Purpose
 
 This page is the handoff for the next ChatGPT session working on **D05 — Mutual Funds Analytics / Tactical Research**.
