@@ -65,9 +65,413 @@ Verified from GitHub on 2026-09-19 during this turnover:
 | D05 preserved local source | `preserve/d05-local-source-20260919` | `478e7a018ba0d587915445d4f7decfb056c63a0d` |
 | D05 path cleanup | `chatgpt/d05-path-cleanup-20260919` | `a7bd4c0903867f6b5e4d378a502f27480c3813fe` |
 | D06 | `kriskingg/investment-tracker-app` / `main` | `8f3a24bc7f30ae10d6695a6a292447351a7db5e9` |
-| Registry | `kriskingg/Dashboards` / `main` before this turnover update | `8427703cdc08d8a2ab2a4c8de851974acb5471a1` |
+| Registry | `kriskingg/Dashboards` / `main` at start of this refinement | `007320cf541d8547e2d07aa1bdccfeca51ad9085` |
 
 These are **GitHub source refs**, not proof of what is currently deployed on either OCI server.
+
+---
+
+## Critical protection rule — `etf-invest-engine` is not a disposable dashboard repository
+
+`kriskingg/etf-invest-engine` is strategically important because it contains the **live ETF/MTF production domain** as well as dashboard code. It must not be treated as a generic UI repository.
+
+Repository:
+https://github.com/kriskingg/etf-invest-engine
+
+Current production-authority branch intended for the live ETF domain:
+```text
+main
+```
+
+Current GitHub `main` head at this turnover:
+```text
+e52aa2ab7f8d4a260027778982b6abfe69203225
+```
+
+Important live-domain paths verified in `main` include:
+
+- scheduled/default ETF/MTF flow:
+  https://github.com/kriskingg/etf-invest-engine/blob/main/pair_2/main_kotak.py
+- qualifying price-drop ETF/MTF flow:
+  https://github.com/kriskingg/etf-invest-engine/blob/main/pair_3/kotak_price_drop.py
+- current dashboard composition root on `main`:
+  https://github.com/kriskingg/etf-invest-engine/blob/main/src/dashboard/app_pro.py
+- hardened dashboard/broker/operator backend on `main`:
+  https://github.com/kriskingg/etf-invest-engine/blob/main/src/dashboard/app_hardened.py
+
+The live production repository also owns or participates in broker/session handling, holdings and positions, ETF campaign/accounting state, safety gates and scheduled trading workflows.
+
+### Therefore, for dashboard-only work
+
+Do **not** casually modify, move, reset, delete or refactor the ETF strategy/execution code just because D03/D04 currently live in the same repository.
+
+Dashboard work must not change:
+
+- live ETF/MTF strategy formulas;
+- buy/sell conditions;
+- broker order semantics;
+- MTF/CNC safety;
+- campaign/lot accounting;
+- holdings/position truth;
+- scheduler behavior;
+- DynamoDB strategy/campaign truth;
+- live broker authentication/session behavior;
+- risk/order validation.
+
+Unless the user explicitly requests a strategy/domain change, the strategy engine is **out of scope**.
+
+Never use a real broker order to test dashboard deployment.
+
+### D01 uses the same GitHub repository name but is a different domain/branch
+
+D01 NIFTY paper research currently lives on:
+
+```text
+kriskingg/etf-invest-engine
+branch: chatgpt/statistical-options-buying-basket-v1
+subtree: nifty-options-paper-research/
+```
+
+That does **not** make D01 part of the live ETF production strategy. D01 is PAPER/SHADOW only and should eventually be extracted as a coherent NIFTY paper-research application without changing its strategy behavior.
+
+Do not merge D01 repository-cleanup work into `etf-invest-engine/main` merely because both histories share one repository.
+
+---
+
+## Planned ETF dashboard decoupling — future architecture, not an immediate code move
+
+The long-term direction is to reduce dashboard code coupling to the live ETF production repository **without weakening the ETF engine's safety boundary**.
+
+The goal is **not** "move everything dashboard-related out of `etf-invest-engine` immediately."
+
+The intended staged direction is:
+
+```text
+presentation/dashboard client
+        |
+        | stable versioned API contract
+        v
+ETF domain service boundary
+inside/owned by etf-invest-engine
+        |
+        +--> broker truth / holdings / positions
+        +--> order safety / validation
+        +--> campaign/accounting truth
+        +--> strategy state
+        +--> live execution controls
+```
+
+### What should move first, later
+
+The most natural future extraction candidate is the **presentation layer**, especially the D04 React/TypeScript/Vite client under `web/src/`.
+
+Do not extract it until:
+
+1. D03/D04 production branch ownership is reconciled;
+2. the deployed server state is re-verified;
+3. `/api/v2` is a stable, versioned contract;
+4. all broker/order/safety authority remains server-side;
+5. D03/D04 feature coverage and safety parity are known;
+6. frontend build/deployment is deterministic;
+7. tests prove the extracted UI cannot bypass server-side safety;
+8. rollback is defined.
+
+Possible future target:
+
+```text
+separate dashboard/frontend repository or package
+    -> talks only to versioned ETF API
+    -> contains no strategy formulas
+    -> contains no broker credentials
+    -> contains no direct broker-order authority
+```
+
+The exact future repository name is **not yet frozen**.
+
+### What must remain with the ETF domain unless a deliberate service split is approved
+
+Keep these responsibilities in or behind the ETF production domain boundary:
+
+- broker normalization and broker truth;
+- authentication/session authority;
+- order preview/validation;
+- order safety;
+- holdings and position reconciliation;
+- MTF/CNC rules;
+- campaign/lot/accounting truth;
+- exposure/reservation/risk checks;
+- live execution authority;
+- strategy and scheduled trade logic.
+
+Do not duplicate any of these rules in a new dashboard repository.
+
+### D03 versus D04 during decoupling
+
+D03 and D04 currently share one backend/runtime but have different presentation architectures.
+
+```text
+D03
+  -> legacy/root operator UI
+  -> server-rendered/injected dashboard paths
+
+D04
+  -> React/TypeScript/Vite
+  -> /v2/
+  -> /api/v2
+```
+
+Before retiring or extracting either one:
+
+- compare feature coverage;
+- compare operator workflows;
+- verify safety parity;
+- identify which one should be the long-term operator UI;
+- prove the other can be retired without losing required controls or visibility.
+
+No route should be deleted merely because another dashboard "looks similar."
+
+---
+
+## Verified code-navigation links for all six dashboards
+
+The links below were re-checked against the current GitHub refs during this turnover. These are the starting points for code review; each dashboard's canonical page contains the fuller file/test list.
+
+### D01 — NIFTY Paper Research
+
+Repository / branch:
+https://github.com/kriskingg/etf-invest-engine/tree/chatgpt/statistical-options-buying-basket-v1/nifty-options-paper-research
+
+Main dashboard renderer:
+https://github.com/kriskingg/etf-invest-engine/blob/chatgpt/statistical-options-buying-basket-v1/nifty-options-paper-research/analysis/nifty_multi_shadow/dashboard.py
+
+Live state/data composition:
+https://github.com/kriskingg/etf-invest-engine/blob/chatgpt/statistical-options-buying-basket-v1/nifty-options-paper-research/analysis/nifty_multi_shadow/live.py
+
+Dashboard refresh policy:
+https://github.com/kriskingg/etf-invest-engine/blob/chatgpt/statistical-options-buying-basket-v1/nifty-options-paper-research/analysis/nifty_multi_shadow/dashboard_refresh.py
+
+Server runtime checkout:
+```text
+chartink-paper:/opt/chartink-paper/nifty-options-v2
+```
+
+Generated report/state path:
+```text
+/var/lib/chartink-paper/nifty-multi-shadow/reports/live_latest.html
+```
+
+### D02 — MCX / Silver Hedge Research
+
+Repository:
+https://github.com/kriskingg/hedge-engine
+
+Main renderer:
+https://github.com/kriskingg/hedge-engine/blob/main/src/hedge_engine/dashboard/renderer.py
+
+Charts:
+https://github.com/kriskingg/hedge-engine/blob/main/src/hedge_engine/dashboard/charts.py
+
+Paper runtime / publication:
+https://github.com/kriskingg/hedge-engine/blob/main/src/hedge_engine/runtime/paper_loop.py
+
+Server runtime checkout:
+```text
+chartink-paper:/opt/hedge-engine
+```
+
+Mutable state:
+```text
+/var/lib/hedge-engine
+```
+
+Primary generated report:
+```text
+/var/lib/hedge-engine/reports/mcx_latest.html
+```
+
+### D03 — ETF / Kotak live operator dashboard
+
+Repository:
+https://github.com/kriskingg/etf-invest-engine
+
+Feature/deployed-lineage branch used by the current D03/D04 architecture:
+https://github.com/kriskingg/etf-invest-engine/tree/platform-v2-v03-preimplementation-20260916
+
+Composition root:
+https://github.com/kriskingg/etf-invest-engine/blob/platform-v2-v03-preimplementation-20260916/src/dashboard/app_pro.py
+
+Hardened backend/operator surface:
+https://github.com/kriskingg/etf-invest-engine/blob/platform-v2-v03-preimplementation-20260916/src/dashboard/app_hardened.py
+
+Root HTML template:
+https://github.com/kriskingg/etf-invest-engine/blob/platform-v2-v03-preimplementation-20260916/src/dashboard/templates/index.html
+
+Order/sell safety:
+https://github.com/kriskingg/etf-invest-engine/blob/platform-v2-v03-preimplementation-20260916/src/dashboard/safety.py
+
+Server runtime checkout:
+```text
+lakshmidevi:/home/ubuntu/kotak
+```
+
+Local origin:
+```text
+127.0.0.1:8080
+```
+
+Private URL:
+```text
+https://etf-trader.tailabfd53.ts.net/
+```
+
+Important local server state:
+```text
+/home/ubuntu/kotak/data/session_store.json
+/home/ubuntu/kotak/data/dashboard_config.json
+/home/ubuntu/kotak/data/platform_v2_operational.db
+/home/ubuntu/kotak/data/logs/
+/home/ubuntu/kotak/data/research/
+```
+
+### D04 — ETF Platform-v2
+
+Feature branch:
+https://github.com/kriskingg/etf-invest-engine/tree/platform-v2-v03-preimplementation-20260916
+
+React application:
+https://github.com/kriskingg/etf-invest-engine/blob/platform-v2-v03-preimplementation-20260916/web/src/App.tsx
+
+Pages:
+https://github.com/kriskingg/etf-invest-engine/blob/platform-v2-v03-preimplementation-20260916/web/src/pages.tsx
+
+Platform-v2 API router:
+https://github.com/kriskingg/etf-invest-engine/blob/platform-v2-v03-preimplementation-20260916/src/platform_v2/api_router.py
+
+SPA mount/deep-link handling:
+https://github.com/kriskingg/etf-invest-engine/blob/platform-v2-v03-preimplementation-20260916/src/dashboard/spa.py
+
+Server runtime checkout:
+```text
+lakshmidevi:/home/ubuntu/kotak
+```
+
+Compiled output — generated, never edit as source:
+```text
+/home/ubuntu/kotak/web/dist
+```
+
+Private URL:
+```text
+https://etf-trader.tailabfd53.ts.net/v2/
+```
+
+### D05 — Mutual Funds Analytics / Tactical Research
+
+Repository:
+https://github.com/kriskingg/mf-analytics-source
+
+Main application:
+https://github.com/kriskingg/mf-analytics-source/blob/main/app/frontend/src/App.tsx
+
+Backend composition:
+https://github.com/kriskingg/mf-analytics-source/blob/main/app/backend/app/main.py
+
+Portable startup:
+https://github.com/kriskingg/mf-analytics-source/blob/main/app/scripts/start_platform.ps1
+
+Canonical Windows workspace:
+```text
+D:\Git_repos\mf-analytics-source
+```
+
+Local URI:
+```text
+file:///D:/Git_repos/mf-analytics-source/
+```
+
+Backend:
+```text
+http://127.0.0.1:8000
+```
+
+Frontend:
+```text
+http://127.0.0.1:5173
+```
+
+Dedicated D05 turnover:
+https://github.com/kriskingg/Dashboards/blob/main/docs/D05_SESSION_TURNOVER_2026-09-19.md
+
+### D06 — Personal Investment Tracker
+
+Repository:
+https://github.com/kriskingg/investment-tracker-app
+
+Main frontend:
+https://github.com/kriskingg/investment-tracker-app/blob/main/frontend/src/App.tsx
+
+Backend composition:
+https://github.com/kriskingg/investment-tracker-app/blob/main/backend/app/main.py
+
+Development launcher:
+https://github.com/kriskingg/investment-tracker-app/blob/main/scripts/start-dev.ps1
+
+Canonical Windows workspace:
+```text
+D:\Git_repos\investment-tracker-app
+```
+
+Local URI:
+```text
+file:///D:/Git_repos/investment-tracker-app/
+```
+
+Backend:
+```text
+http://127.0.0.1:8005
+```
+
+Frontend:
+```text
+http://127.0.0.1:5175
+```
+
+---
+
+## Local/runtime path map — do not infer missing paths
+
+Verified canonical/runtime paths currently documented:
+
+```text
+D01 server source/runtime:
+chartink-paper:/opt/chartink-paper/nifty-options-v2
+
+D01 mutable/report state:
+/var/lib/chartink-paper/nifty-multi-shadow/
+
+D02 server source/runtime:
+chartink-paper:/opt/hedge-engine
+
+D02 mutable state:
+/var/lib/hedge-engine/
+
+D03/D04 server source/runtime:
+lakshmidevi:/home/ubuntu/kotak
+
+D03/D04 operational data:
+/home/ubuntu/kotak/data/
+
+D05 Windows source:
+D:\Git_repos\mf-analytics-source
+
+D06 Windows source:
+D:\Git_repos\investment-tracker-app
+
+Central documentation:
+kriskingg/Dashboards
+```
+
+Do not invent a Windows checkout path for D01-D04 from naming convention alone. If a local Windows checkout becomes relevant, verify it first.
 
 ---
 
@@ -366,9 +770,12 @@ After D05:
 1. audit/preserve D06 local unpublished source;
 2. re-verify D03/D04 live deployed branch/SHA before touching live ETF dashboard code;
 3. reconcile D03/D04 production/deployment authority and reboot startup;
-4. continue D01 deployment/repository normalization without strategy changes;
-5. address the D01/D02 shared public serving/control boundary;
-6. complete cross-system backup/restore evidence.
+4. define the stable ETF dashboard API boundary and prepare a no-strategy-change dashboard decoupling plan;
+5. compare D03/D04 feature coverage and decide the long-term operator UI;
+6. only then consider extracting the presentation layer, with D04 React as the most natural first candidate;
+7. continue D01 deployment/repository normalization without strategy changes;
+8. address the D01/D02 shared public serving/control boundary;
+9. complete cross-system backup/restore evidence.
 
 This order is an operational sequencing recommendation, not a requirement to mix independent codebases into one change.
 
@@ -378,7 +785,7 @@ This order is an operational sequencing recommendation, not a requirement to mix
 
 Use:
 
-> Continue the dashboard consolidation from the all-dashboard turnover page. First identify which of D01-D06 we are working on, verify that dashboard's current GitHub ref and runtime/local state, then continue only within its ownership boundary. For D05, also read the dedicated D05 turnover page. Do not merge, delete, reset, deploy, or alter strategy/live-order behavior until the relevant preservation/review/test gates pass.
+> Continue the dashboard consolidation from the all-dashboard turnover page. First identify which of D01-D06 we are working on, verify that dashboard's current GitHub ref and runtime/local state, then continue only within its ownership boundary. For D05, also read the dedicated D05 turnover page. Treat `etf-invest-engine/main` as protected live ETF/MTF production strategy code: do not change strategy, broker/order safety, scheduler or execution behavior for a dashboard-only task. Dashboard presentation decoupling is a later staged migration after stable API and parity gates. Do not merge, delete, reset, deploy, or alter strategy/live-order behavior until the relevant preservation/review/test gates pass.
 
 ---
 
@@ -391,3 +798,5 @@ Use:
 - D05 integration is the immediate unfinished repository task.
 - D06 local preservation remains pending.
 - D01-D04 each have documented runtime/ownership/security/durability work still open.
+- `etf-invest-engine/main` is explicitly protected as live ETF/MTF production strategy/domain code.
+- Future D03/D04 dashboard decoupling must start at the presentation/API boundary; no strategy/safety logic may be duplicated or moved casually.
