@@ -1,7 +1,7 @@
 # D01 — NIFTY Paper Research Dashboard
 
-**Status:** PROVEN  
-**Verified:** 2026-09-18  
+**Status:** RUNTIME SOURCE CURRENT; CHECKOUT HEAD STALE/HYBRID  
+**Verified:** 2026-09-19  
 **Browser URL:** `https://triumph-events-chair-problems.trycloudflare.com/live_latest.html`
 
 ## Purpose
@@ -180,17 +180,19 @@ Verified branch:
 chatgpt/statistical-options-buying-basket-v1
 ```
 
-Verified server HEAD:
+Observed checkout HEAD:
 
 ```text
 97f51a865a71bd44ddadd2007f609b4c083556a0
 ```
 
-Commit subject:
+Current GitHub branch HEAD independently verified on 2026-09-19:
 
 ```text
-Test evidence delivery end-to-end acceptance checks
+f9a8fe8a22173fcda902bcbc2f8fd3a4da4defa5
 ```
+
+The checkout metadata is therefore stale relative to the remote branch. This does **not** mean the executable NIFTY runtime source is stale; the runtime source proof below shows the live `dashboard.py` is already the current GitHub version.
 
 ## Authoritative Git-tracked source
 
@@ -243,7 +245,22 @@ GitHub active-branch source:
 4a4db2288563374e4fed4e9d8e6d6a3cb7ed138a
 ```
 
-Result: the runtime copies were **byte-for-byte identical** to the GitHub source when verified.
+Final 2026-09-19 proof:
+
+```text
+runtime dashboard.py blob:
+a6757e3087e643b0ac75f41ce993e371b3aac35b
+
+old tracked checkout dashboard.py blob:
+7a4a959784662ded8aec18b1c50c70585d2faa94
+
+current GitHub dashboard.py blob:
+a6757e3087e643b0ac75f41ce993e371b3aac35b
+```
+
+A full recursive comparison between the executable top-level runtime tree and the old tracked source reported only `dashboard.py` as different. GitHub comparison from checkout HEAD `97f51a8...` to current branch HEAD `f9a8fe8...` changes only `dashboard.py` plus `test_nifty_dashboard_v2.py`; the test file is outside the executable runtime source tree.
+
+Therefore the deployed executable NIFTY runtime source tree is **current for the application code**, while the Git checkout metadata remains at the older commit. This is a hybrid deployment layout and should be documented as such rather than described simply as either "up to date" or "stale".
 
 ## Historical lineage versus current owner
 
@@ -312,6 +329,8 @@ See [VERIFICATION_RUNBOOK.md](VERIFICATION_RUNBOOK.md) for reusable read-only co
 
 ```text
 D01 owner status: PROVEN
+Runtime source status: CURRENT
+Checkout metadata status: STALE/HYBRID
 
 Dashboard:
 NIFTY Paper Research
@@ -334,3 +353,20 @@ chartink-paper:/var/lib/chartink-paper/nifty-multi-shadow/reports/live_latest.ht
 Serving layer:
 shared mcx_paper.control_server on 127.0.0.1:8765
 ```
+
+## 2026-09-19 deployment-layout conclusion
+
+The executable NIFTY runtime and the Git checkout are not represented by one clean Git commit on disk:
+
+```text
+checkout HEAD:
+97f51a865a71bd44ddadd2007f609b4c083556a0
+
+current GitHub branch HEAD:
+f9a8fe8a22173fcda902bcbc2f8fd3a4da4defa5
+
+executable runtime dashboard.py:
+matches current GitHub blob a6757e3087e643b0ac75f41ce993e371b3aac35b
+```
+
+This proves current runtime code for the only application file changed between those two commits, but it also proves the server deployment is not a clean Git checkout representation. Future deployment work should preserve the working runtime while deliberately normalizing this layout; do not use `git reset --hard` or `git clean` as a shortcut.
