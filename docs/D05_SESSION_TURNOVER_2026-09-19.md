@@ -439,44 +439,55 @@ That documentation intentionally omits temporary terminal/index troubleshooting 
 ---
 
 
-## 2026-09-19 continuation update
+## 2026-09-19 final integration completion
 
-The combined integration branch now exists:
+D05 repository consolidation is complete on GitHub.
 
-```text
-chatgpt/d05-integration-20260919
-```
-
-Current integration head after test-safety corrections:
+Final merged authority:
 
 ```text
-48ebe6f1f9e2bdfffbbb9356e58ff9e5a362abac
+repository: kriskingg/mf-analytics-source
+branch: main
+main SHA: d25165a31e8a64e8f9814f0f58aa8366ffce2a0c
+combined PR: #2
+validated integration head: 48ebe6f1f9e2bdfffbbb9356e58ff9e5a362abac
 ```
 
-Completed since the original turnover:
-- preservation + path-cleanup combined;
-- README conflict deliberately resolved;
-- frontend/backend port references aligned to canonical port 8000;
-- tracked legacy path `D:\Dhan\Mutual_funds` reduced to zero;
-- trailing-whitespace defects corrected;
-- focused regression suite passed 9/9 locally;
-- full backend suite exposed three stale/unsafe tests, not production-algorithm failures;
-- updater regression tests were corrected so they cannot reach normal AMFI/database mutation paths;
-- lifecycle test path now derives from the repository root;
-- dynamic clean-equity universe test no longer hardcodes 817;
-- `app/backend/requirements-test.txt` now declares pytest/httpx2 test dependencies.
+GitHub ancestry was verified after merge:
+- `main` contains the preserved local-source branch history;
+- `main` contains the path-cleanup branch history;
+- `main` contains the validated integration head;
+- PR #1 is superseded by the combined merge and is no longer pending independently;
+- no source/preservation/integration branch was deleted.
 
-Still required before merge:
-- rerun full backend test suite on the latest integration head;
-- frontend build + lint;
-- runtime smoke on 8000/5173;
-- verify canonical runtime path/no legacy process;
-- create/review combined PR;
-- merge only after validation;
-- then close/supersede PR #1 and update final Dashboards SHAs/evidence.
+Final local validation performed before merge:
+- `git diff --check main...HEAD`: PASS;
+- tracked `D:\Dhan\Mutual_funds` references: zero;
+- backend non-runtime suite: **197 passed, 24 intentionally skipped**;
+- lifecycle/runtime suite: **3 passed**;
+- frontend production build: PASS;
+- frontend lint: **0 errors, 19 warnings**;
+- backend `http://127.0.0.1:8000/docs`: HTTP 200;
+- frontend `http://127.0.0.1:5173`: HTTP 200;
+- running-process legacy path check: zero;
+- working tree after validation: clean.
 
+Important test-safety corrections included in the merge:
+- updater regression tests no longer reach normal AMFI/database mutation paths;
+- lifecycle paths derive from the repository root;
+- dynamic clean-equity counts are no longer pinned to stale value 817;
+- `app/backend/requirements-test.txt` declares backend test dependencies.
 
-## What is still pending
+Remaining administrative follow-up:
+- switch/pull the local checkout to merged `main` when convenient;
+- keep migration backups until explicit cleanup approval;
+- do not delete preservation/integration branches solely because the merge completed.
+
+The pre-merge integration procedure below is retained only as historical evidence and is no longer an active instruction.
+
+---
+
+## Historical pre-merge instructions (superseded)
 
 ### Highest-priority next task
 
