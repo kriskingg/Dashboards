@@ -12,6 +12,8 @@
 | Platform-v2 React frontend | `web/` in ETF repo feature branch | optional separate frontend repo/package later | static client could have independent release cadence | stable versioned API, parity tests, deterministic build/deploy | **DEFER** |
 | Shared research web server | runtime `mcx_paper.control_server`, Git authority unproven | versioned read-only gateway | D01/D02 share ingress but not domain ownership | capture authoritative source; remove mutating control from public origin | **RECOMMENDED** |
 | MCX paper control | public shared origin | private authenticated hedge-domain control | current fixed-header/Origin check is not strong auth | define control contract and private access | **SECURITY BLOCKER** |
+| Mutual Funds Analytics D05 | `mf-analytics-source` | remain in `mf-analytics-source` | coherent analytics/data/UI domain already separated | keep local runtime docs current | **KEEP** |
+| Investment Tracker D06 | `investment-tracker-app` | remain in `investment-tracker-app` | clean independent local-first accounting app | keep port/runtime docs current | **KEEP** |
 | `Dashboards` repo | ownership docs | remain docs/decision registry | one control plane without copying runtime source | keep links/current SHAs refreshed | **KEEP** |
 
 ## Important distinction: "mixed repo" versus "correct coupling"

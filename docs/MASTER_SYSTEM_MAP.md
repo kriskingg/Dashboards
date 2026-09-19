@@ -2,7 +2,7 @@
 
 **Last consolidated:** 2026-09-19
 
-This is the single operational map for the four dashboard URLs currently in use or under investigation. It separates **URL**, **network exposure**, **server**, **port**, **serving process**, **generator/source code**, **persistent data**, **reboot behavior**, **server-loss behavior**, and **cleanup status**.
+This is the single operational map for the dashboard systems currently identified across OCI and local workstations. D01-D04 are the two-OCI-host systems; D05-D06 are local Windows applications. It separates **URL**, **network exposure**, **server**, **port**, **serving process**, **generator/source code**, **persistent data**, **reboot behavior**, **server-loss behavior**, and **cleanup status**.
 
 ## Four URLs, two OCI hosts, three known application owners
 
@@ -391,6 +391,20 @@ For every suspected legacy component, identify:
 - dashboard links/API consumers;
 - rollback dependency;
 - last-use evidence.
+
+## Additional dashboards outside the two OCI hosts
+
+The account-wide 2026-09-19 scan identified two additional confirmed dashboards:
+
+| ID | Dashboard | Runtime | Repository | Current executable/start contract |
+|---|---|---|---|---|
+| D05 | Mutual Funds Analytics / Tactical Research | local Windows, documented workspace `D:\Dhan\Mutual_funds` | `kriskingg/mf-analytics-source` / `main` | Vite 5173 + FastAPI 8000 from `app/scripts/start_platform.ps1` |
+| D06 | Personal Investment Tracker | local Windows, `D:\Git_repos\investment-tracker-app` | `kriskingg/investment-tracker-app` / `main` | Vite 5175 + FastAPI 8005 from `scripts/start-dev.ps1` |
+
+Neither dashboard currently has a proven dependency on `lakshmidevi` or
+`chartink-paper`.
+
+See [ACCOUNT_WIDE_UI_SCAN_2026-09-19.md](ACCOUNT_WIDE_UI_SCAN_2026-09-19.md).
 
 ## Dashboard code/repository decision control
 
