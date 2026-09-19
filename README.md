@@ -42,7 +42,7 @@ dependencies, migration decision and pre-change checklist.
 | D02 | [MCX / Silver Hedge Research](docs/dashboards/D02-MCX-SILVER-HEDGE.md) ([deep evidence](docs/D02-mcx-silver-hedge.md)) | **PROVEN CURRENT RUNTIME** | `chartink-paper` / `80.225.234.65` | `/opt/hedge-engine` | `kriskingg/hedge-engine` / `main` |
 | D03 | [LIVE ETF/Kotak operator dashboard `/`](docs/dashboards/D03-ETF-KOTAK-OPERATOR.md) ([deep evidence](docs/D03-etf-kotak-private-dashboard.md)) | **LIVE RUNTIME PROVEN; DEPLOYED CHECKOUT != MAIN** | `lakshmidevi` / `141.148.219.153` | `/home/ubuntu/kotak`, Uvicorn `127.0.0.1:8080` | `kriskingg/etf-invest-engine`; observed branch `platform-v2-v03-preimplementation-20260916` |
 | D04 | [ETF dashboard `/v2/`](docs/dashboards/D04-ETF-PLATFORM-V2.md) ([deep evidence](docs/D04-etf-dashboard-v2.md)) | **ROUTE OWNERSHIP PROVEN; SAME PROCESS, DISTINCT FRONTEND** | `lakshmidevi` / `141.148.219.153` | same Uvicorn process; static mount from `web/dist` | same `etf-invest-engine` runtime |
-| D05 | [Mutual Funds Analytics / Tactical Research](docs/dashboards/D05-MUTUAL-FUNDS-ANALYTICS.md) | **SOURCE ARCHITECTURE PROVEN; LOCAL WINDOWS APP** | local Windows / `D:\\Dhan\\Mutual_funds` | React/Vite + FastAPI + PostgreSQL | `kriskingg/mf-analytics-source` / `main` |
+| D05 | [Mutual Funds Analytics / Tactical Research](docs/dashboards/D05-MUTUAL-FUNDS-ANALYTICS.md) | **LOCAL MIGRATION VERIFIED; APP HEALTHY** | local Windows / `D:\\Git_repos\\mf-analytics-source` | React/Vite + FastAPI + PostgreSQL | `kriskingg/mf-analytics-source` / `main` |
 | D06 | [Personal Investment Tracker](docs/dashboards/D06-INVESTMENT-TRACKER.md) | **SOURCE ARCHITECTURE PROVEN; LOCALHOST-ONLY APP** | local Windows / `D:\\Git_repos\\investment-tracker-app` | React/Vite + FastAPI + SQLite | `kriskingg/investment-tracker-app` / `main` |
 
 Start with [MASTER_SYSTEM_MAP.md](docs/MASTER_SYSTEM_MAP.md) for the four-URL,
@@ -61,6 +61,8 @@ Fresh `chartink-paper` evidence is in [CHARTINK_PAPER_RUNTIME_VERIFICATION_2026-
 Fresh `lakshmidevi` evidence is in [LAKSHMIDEVI_RUNTIME_VERIFICATION_2026-09-19.md](docs/LAKSHMIDEVI_RUNTIME_VERIFICATION_2026-09-19.md).
 
 The 36-repository account-wide UI scan is recorded in [ACCOUNT_WIDE_UI_SCAN_2026-09-19.md](docs/ACCOUNT_WIDE_UI_SCAN_2026-09-19.md).
+
+The verified D05 local migration from the legacy workspace into the canonical Git workspace is recorded in [D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md](docs/D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md).
 
 See [OWNERSHIP_MAP.md](docs/OWNERSHIP_MAP.md) for the evidence-oriented master table and [SERVER_TOPOLOGY.md](docs/SERVER_TOPOLOGY.md) for physical/logical server placement.
 
@@ -84,3 +86,4 @@ It is intentionally a **control/decision registry, not a runtime-code repository
 - MCX source-ownership findings added from GitHub: **2026-09-19**
 - Fresh `chartink-paper` runtime audit recorded: **2026-09-19**
 - Fresh `lakshmidevi` D03/D04 runtime audit recorded: **2026-09-19**
+- D05 local Windows migration to `D:\\Git_repos\\mf-analytics-source` verified: **2026-09-19**
