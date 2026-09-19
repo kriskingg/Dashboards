@@ -31,13 +31,19 @@ Tailscale Serve
 /home/ubuntu/kotak/web/dist/assets/index-BquxAb8W.css
 ```
 
-Observed route declaration:
+Current deployed-branch source composes the route in two steps:
 
 ```python
-app.mount("/v2", StaticFiles(directory=str(WEB_DIST), html=True), name="platform_v2_web")
+# src/dashboard/app_pro.py
+install_spa(app, WEB_DIST)
+
+# src/dashboard/spa.py
+app.mount("/v2", BrowserSPA(directory=str(dist), html=True), name="platform_v2_web")
 ```
 
-The same application also includes Platform-v2 API routers.
+The same application also includes Platform-v2 API routers. Persistent frontend
+changes belong in `web/src/`, followed by a deterministic Vite build; do not
+edit `web/dist` directly.
 
 ## Runtime process
 
@@ -84,3 +90,7 @@ Do not delete or redirect `/v2/` until:
 4. rollback is defined.
 
 See [LAKSHMIDEVI_RUNTIME_VERIFICATION_2026-09-19.md](LAKSHMIDEVI_RUNTIME_VERIFICATION_2026-09-19.md).
+
+## Code-change and repository decision guide
+
+For exact files/tests to modify for D04, plus repository migration/retention decisions, see [Dashboard Code Ownership, Change Guide and Repository Boundaries](DASHBOARD_CODE_CHANGE_AND_OWNERSHIP_GUIDE.md) and [Dashboard Repository Boundary Decision Register](DASHBOARD_REPOSITORY_BOUNDARY_DECISIONS.md).
