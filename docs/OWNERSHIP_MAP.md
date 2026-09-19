@@ -145,43 +145,64 @@ See [D02-mcx-silver-hedge.md](D02-mcx-silver-hedge.md) and [CHARTINK_PAPER_RUNTI
 
 ## D03 — LIVE ETF/Kotak operator dashboard `/`
 
-**Source/network design status:** strongly documented.  
-**Fresh deployed-byte verification:** pending `lakshmidevi` audit.
+**Runtime status:** LIVE RUNTIME + PRIVATE INGRESS PROVEN.  
+**Deployment-state caveat:** observed checkout is not `main`.  
+**Fresh runtime verification:** 2026-09-19.
 
-| Layer | Current documented value |
+| Layer | Verified value |
 |---|---|
 | URL | `https://etf-trader.tailabfd53.ts.net/` |
 | Purpose | live ETF/Kotak production operator dashboard |
 | Server | `lakshmidevi / etf-trader` |
 | Public OCI IP | `141.148.219.153` |
+| Tailscale IPv4 | `100.120.194.42` |
 | External ingress | Tailscale Serve, tailnet-only HTTPS TCP 443 |
 | Local origin | `127.0.0.1:8080` |
 | Application | `src.dashboard.app_pro:app` |
+| Runtime process | Uvicorn, one worker |
 | Checkout | `/home/ubuntu/kotak` |
 | Repository | `kriskingg/etf-invest-engine` |
-| Branch | `main` |
-| Branch role | **LIVE ETF/MTF production branch** |
-| General Internet exposure | designed **NO**; Tailscale-only + application authentication |
-| Fresh runtime proof | pending |
+| Observed server branch | `platform-v2-v03-preimplementation-20260916` |
+| Observed server HEAD | `306bd5c20dc48c682dab8c85ce1b2c677f97f66a` |
+| Server-local `origin/main` | `b1485952fd9dc5846629c59134bfda9bb9765c21` |
+| Current GitHub `main` verified 2026-09-19 | `56a5a1bb666ed76bd1a0ab253c897eda324547c3` |
+| Intended branch role | `main` remains documented live ETF/MTF production authority |
+| Weekday deployment | 08:57 IST fetch + hard reset to `origin/main` |
+| Dashboard startup ownership | SSH session scope; no reboot-persistent dashboard service/hook found |
+| General Internet exposure | no application listener; tailnet-only Tailscale; no cloudflared observed |
+| Fresh runtime proof | **PROVEN** |
 
-Important: `etf-invest-engine/main` also owns the scheduled live ETF/MTF
-strategy (`pair_1`, `pair_2`, `pair_3`, `KnowYourPNL`, DynamoDB campaign
-integration and cron). D03 is the operator surface for that production
-platform; it is not a research-only dashboard.
+Important: the intended production branch policy and the observed checkout differ.
+Do not silently normalize the checkout or allow the weekday hard reset to redefine
+production without review.
 
 See [D03-etf-kotak-private-dashboard.md](D03-etf-kotak-private-dashboard.md) and
-[MASTER_SYSTEM_MAP.md](MASTER_SYSTEM_MAP.md).
+[LAKSHMIDEVI_RUNTIME_VERIFICATION_2026-09-19.md](LAKSHMIDEVI_RUNTIME_VERIFICATION_2026-09-19.md).
 
 ---
 
 ## D04 — ETF dashboard `/v2/`
 
-Status: **pending**.
+**Status:** ROUTE OWNERSHIP PROVEN; SAME PROCESS AS D03; DISTINCT FRONTEND.
 
-URL under investigation:
+| Layer | Verified value |
+|---|---|
+| URL | `https://etf-trader.tailabfd53.ts.net/v2/` |
+| Server | `lakshmidevi / etf-trader` |
+| Ingress | same tailnet-only Tailscale Serve as D03 |
+| Local origin | same `127.0.0.1:8080` Uvicorn process |
+| Application owner | `src.dashboard.app_pro:app` |
+| Route implementation | FastAPI `StaticFiles` mount at `/v2` |
+| Static source | `/home/ubuntu/kotak/web/dist` |
+| Observed HTML title | `Trading Platform` |
+| JS asset | `/v2/assets/index-CDny3836.js` |
+| CSS asset | `/v2/assets/index-BquxAb8W.css` |
+| Strategy engine | **not separate**; same application/runtime boundary |
+| Fresh runtime proof | 2026-09-19 |
 
-```text
-https://etf-trader.tailabfd53.ts.net/v2/
-```
+D04 is not an alias merely created by Tailscale and is not a separate process.
+It is a distinct compiled presentation surface in the D03 application.
 
-Treat independently from D03 until proven otherwise.
+Do not retire it until D03/D04 feature coverage and active usage are compared.
+
+See [D04-etf-dashboard-v2.md](D04-etf-dashboard-v2.md).
