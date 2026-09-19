@@ -1,6 +1,6 @@
 # D02 — MCX / Silver Hedge Research Dashboard
 
-**Status:** RUNTIME SOURCE PROVEN BYTE-IDENTICAL; INSTALLED SYSTEMD UNIT DRIFT PRESENT  
+**Status:** PROVEN CURRENT RUNTIME; SYSTEMD COPY DIFFERS ONLY BY LINE ENDINGS  
 **GitHub verification:** 2026-09-19  
 **Fresh OCI verification:** 2026-09-19  
 **Browser URL:** `https://triumph-events-chair-problems.trycloudflare.com/mcx_latest.html`
@@ -225,7 +225,9 @@ Result:
 SYSTEMD_UNIT_COMPARE=DIFFERENT
 ```
 
-The `systemctl cat` output appears semantically aligned with the repository file, but they are not byte-identical. A direct diff/cmp is required to identify whether the difference is whitespace/newline-only or semantic.
+The final direct diff proved the logical content is identical. The repository copy uses LF line endings, while the installed unit uses CRLF line endings. The first byte difference is exactly LF versus CRLF; no configuration line differs semantically.
+
+Therefore this is a **non-semantic line-ending difference only**, not operational service drift.
 
 ## Shared-ingress boundary
 
@@ -244,10 +246,10 @@ Application source:
 PROVEN_BYTE_IDENTICAL
 ```
 
-Overall D02, because the installed unit differs from the repository unit:
+Overall D02:
 
 ```text
-PROVEN_WITH_RUNTIME_DRIFT
+PROVEN_CURRENT_RUNTIME
 ```
 
-See [SERVER1_RUNTIME_VERIFICATION_2026-09-19.md](SERVER1_RUNTIME_VERIFICATION_2026-09-19.md) for the complete audit record.
+See [SERVER1_RUNTIME_VERIFICATION_2026-09-19.md](SERVER1_RUNTIME_VERIFICATION_2026-09-19.md) for the complete byte-level audit record.
