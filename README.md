@@ -27,14 +27,21 @@ Browser URL
 - A deployed runtime copy may differ structurally from the authoritative Git-tracked source; document both.
 - Before modifying a dashboard, identify its row in the ownership map and confirm the current branch/commit again.
 
+## Canonical dashboard pages
+
+Use [docs/dashboards/README.md](docs/dashboards/README.md) as the page index.
+Each dashboard has its own standalone operational/change page with the same
+structure: URL, server, runtime, repo/branch, exact source files, tests, data
+dependencies, migration decision and pre-change checklist.
+
 ## Current dashboard map
 
 | ID | Dashboard | Status | Server | Runtime owner | GitHub source |
 |---|---|---|---|---|---|
-| D01 | [NIFTY Paper Research](docs/D01-nifty-paper-research.md) ([full code/runtime architecture](docs/D01-CODE-AND-RUNTIME-ARCHITECTURE.md)) | **RUNTIME SOURCE CURRENT; CHECKOUT HEAD STALE** | `chartink-paper` / `80.225.234.65` | `/opt/chartink-paper/nifty-options-v2` | `kriskingg/etf-invest-engine` / `chatgpt/statistical-options-buying-basket-v1` |
-| D02 | [MCX / Silver Hedge Research](docs/D02-mcx-silver-hedge.md) | **PROVEN CURRENT RUNTIME** | `chartink-paper` / `80.225.234.65` | `/opt/hedge-engine` | `kriskingg/hedge-engine` / `main` |
-| D03 | [LIVE ETF/Kotak operator dashboard `/`](docs/D03-etf-kotak-private-dashboard.md) | **LIVE RUNTIME PROVEN; DEPLOYED CHECKOUT != MAIN** | `lakshmidevi` / `141.148.219.153` | `/home/ubuntu/kotak`, Uvicorn `127.0.0.1:8080` | `kriskingg/etf-invest-engine`; observed branch `platform-v2-v03-preimplementation-20260916` |
-| D04 | [ETF dashboard `/v2/`](docs/D04-etf-dashboard-v2.md) | **ROUTE OWNERSHIP PROVEN; SAME PROCESS, DISTINCT FRONTEND** | `lakshmidevi` / `141.148.219.153` | same Uvicorn process; static mount from `web/dist` | same `etf-invest-engine` runtime |
+| D01 | [NIFTY Paper Research](docs/dashboards/D01-NIFTY-PAPER-RESEARCH.md) ([deep evidence](docs/D01-nifty-paper-research.md)) | **RUNTIME SOURCE CURRENT; CHECKOUT HEAD STALE** | `chartink-paper` / `80.225.234.65` | `/opt/chartink-paper/nifty-options-v2` | `kriskingg/etf-invest-engine` / `chatgpt/statistical-options-buying-basket-v1` |
+| D02 | [MCX / Silver Hedge Research](docs/dashboards/D02-MCX-SILVER-HEDGE.md) ([deep evidence](docs/D02-mcx-silver-hedge.md)) | **PROVEN CURRENT RUNTIME** | `chartink-paper` / `80.225.234.65` | `/opt/hedge-engine` | `kriskingg/hedge-engine` / `main` |
+| D03 | [LIVE ETF/Kotak operator dashboard `/`](docs/dashboards/D03-ETF-KOTAK-OPERATOR.md) ([deep evidence](docs/D03-etf-kotak-private-dashboard.md)) | **LIVE RUNTIME PROVEN; DEPLOYED CHECKOUT != MAIN** | `lakshmidevi` / `141.148.219.153` | `/home/ubuntu/kotak`, Uvicorn `127.0.0.1:8080` | `kriskingg/etf-invest-engine`; observed branch `platform-v2-v03-preimplementation-20260916` |
+| D04 | [ETF dashboard `/v2/`](docs/dashboards/D04-ETF-PLATFORM-V2.md) ([deep evidence](docs/D04-etf-dashboard-v2.md)) | **ROUTE OWNERSHIP PROVEN; SAME PROCESS, DISTINCT FRONTEND** | `lakshmidevi` / `141.148.219.153` | same Uvicorn process; static mount from `web/dist` | same `etf-invest-engine` runtime |
 
 Start with [MASTER_SYSTEM_MAP.md](docs/MASTER_SYSTEM_MAP.md) for the four-URL,
 two-host, code/data/recovery/security/cleanup view.
