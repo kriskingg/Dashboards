@@ -10,8 +10,8 @@ This is the single operational map for the four dashboard URLs currently in use 
 |---|---|---|---|---|---|---|---|
 | D01 | `https://triumph-events-chair-problems.trycloudflare.com/live_latest.html` | NIFTY options paper research | `chartink-paper` / `80.225.234.65` | Cloudflare Quick Tunnel, Internet-facing URL | `127.0.0.1:8765` | `kriskingg/etf-invest-engine`, branch `chatgpt/statistical-options-buying-basket-v1` | Runtime source proven current; checkout metadata hybrid/stale |
 | D02 | `https://triumph-events-chair-problems.trycloudflare.com/mcx_latest.html` | MCX / Silver hedge paper research | `chartink-paper` / `80.225.234.65` | same Cloudflare Quick Tunnel | `127.0.0.1:8765` | `kriskingg/hedge-engine`, `main` | Proven current runtime |
-| D03 | `https://etf-trader.tailabfd53.ts.net/` | Live ETF/Kotak operator dashboard | `lakshmidevi / etf-trader` / `141.148.219.153` | Tailscale Serve, tailnet-only | documented `127.0.0.1:8080` | `kriskingg/etf-invest-engine`, `main` | Source/network design documented; fresh runtime re-check pending |
-| D04 | `https://etf-trader.tailabfd53.ts.net/v2/` | Unknown/legacy/alternate ETF dashboard route until proven | expected same ETF server | expected same private Tailscale hostname | not yet proven | not yet proven | **UNMAPPED** |
+| D03 | `https://etf-trader.tailabfd53.ts.net/` | Live ETF/Kotak operator dashboard | `lakshmidevi / etf-trader` / `141.148.219.153` | Tailscale Serve, tailnet-only | `127.0.0.1:8080` | `kriskingg/etf-invest-engine`; observed deployed branch `platform-v2-v03-preimplementation-20260916` | Live runtime/ingress proven; deployed checkout differs from intended `main` authority |
+| D04 | `https://etf-trader.tailabfd53.ts.net/v2/` | Platform-v2 compiled ETF/Kotak frontend | same `lakshmidevi` server | same private Tailscale hostname | same `127.0.0.1:8080` Uvicorn process | same FastAPI app; static frontend from `/home/ubuntu/kotak/web/dist` | **ROUTE OWNERSHIP PROVEN** |
 
 The four URLs do **not** represent four independent strategy engines.
 
@@ -100,15 +100,17 @@ The historical `mcx-paper-live.service` exists but is disabled/inactive.
 
 ## lakshmidevi — live ETF/Kotak host
 
-Documented identity:
+Freshly verified identity/runtime on 2026-09-19:
 
 ```text
 Host:            lakshmidevi
 Tailscale node:  etf-trader
 Public OCI IP:   141.148.219.153
 MagicDNS:        etf-trader.tailabfd53.ts.net
-Tailscale IPv4:  100.120.194.42   (verified 2026-09-15)
+Tailscale IPv4:  100.120.194.42
 Checkout:        /home/ubuntu/kotak
+Observed branch: platform-v2-v03-preimplementation-20260916
+Observed HEAD:   306bd5c20dc48c682dab8c85ce1b2c677f97f66a
 ```
 
 This is the live ETF/MTF production host and is a different OCI VM from `chartink-paper`.
@@ -131,6 +133,13 @@ approved Tailscale device
 
 The `main` branch is not merely a dashboard branch. It is the repository's **live ETF/MTF production branch**, including the scheduled ETF strategy.
 
+However, the fresh host audit found the actual checkout on
+`platform-v2-v03-preimplementation-20260916` at `306bd5c...`, with a stale
+server-local `origin/main` ref. The weekday 08:57 IST deployment cron fetches
+and hard-resets the checkout to `origin/main`. Treat this as a deployment-state
+mismatch requiring intentional reconciliation; do not assume the next reset is a
+no-op.
+
 Known live components on `main`:
 
 ```text
@@ -148,21 +157,30 @@ D03 must therefore be treated as a production operator surface, not as a researc
 
 ### D04 /v2/
 
-The hostname alone does not prove route ownership.
-
-Still to determine from `lakshmidevi`:
+Fresh 2026-09-19 runtime evidence proved D04 is a distinct compiled frontend
+mounted inside the same FastAPI/Uvicorn application as D03:
 
 ```text
-/v2/ is one of:
-- same FastAPI application route;
-- Tailscale Serve path mapping;
-- redirect/alias;
-- static/legacy page;
-- separate process;
-- obsolete/not present.
+src/dashboard/app_pro.py
+  -> app.mount("/v2", StaticFiles(directory=str(WEB_DIST), html=True))
+
+WEB_DIST:
+  /home/ubuntu/kotak/web/dist
 ```
 
-Do not create or preserve duplicate functionality merely because `/v2/` exists. First identify what it is.
+Observed assets:
+
+```text
+web/dist/index.html
+web/dist/assets/index-CDny3836.js
+web/dist/assets/index-BquxAb8W.css
+```
+
+D04 is therefore not a second strategy engine and not a separate Tailscale path
+proxy. It may still overlap D03 functionally, but feature coverage and operator
+usage must be compared before any retirement decision.
+
+See [D04-etf-dashboard-v2.md](D04-etf-dashboard-v2.md).
 
 ## Internet visibility and access
 
@@ -200,7 +218,7 @@ Application authentication: required
 
 Therefore D03 is designed to be private, not visible to the general Internet.
 
-D04 inherits only the hostname's private network boundary until its exact route/process is verified.
+D04 is proven to inherit the same tailnet-only Tailscale/Uvicorn boundary because it is mounted inside the same application process.
 
 ## Data ownership and durability
 
@@ -223,8 +241,10 @@ Host-local production/runtime files also exist and must not be described as "zer
 /home/ubuntu/kotak/data/session_store.json
 /home/ubuntu/kotak/data/dashboard_runtime.env
 /home/ubuntu/kotak/data/dashboard_config.json
+/home/ubuntu/kotak/data/platform_v2_operational.db
 /home/ubuntu/kotak/data/logs/
 /home/ubuntu/kotak/data/research/
+/var/lib/hedge-engine/        shadow state/control/evidence on lakshmidevi
 pair_1/load_secrets.sh        generated runtime file
 ```
 
@@ -284,16 +304,19 @@ Do not treat the current Quick Tunnel URL as a durable disaster-recovery address
 
 ### lakshmidevi reboot
 
-Repository design says:
-- live ETF strategy scheduling is cron/systemd based;
-- Tailscale is the production private ingress;
-- dashboard launcher is `scripts/start_dashboard.sh`;
-- startup must fail closed rather than create a public fallback.
+Fresh 2026-09-19 evidence:
 
-Fresh `lakshmidevi` proof is still required for:
-- exact reboot/autostart mechanism of the Uvicorn dashboard;
-- current Tailscale Serve state after reboot;
-- D04 route behavior.
+- Tailscale Serve is active and tailnet-only, proxying to `127.0.0.1:8080`;
+- the current Uvicorn dashboard process was launched from an SSH session and is
+  not owned by an observed dashboard systemd service, user service,
+  `@reboot` cron entry, or shell startup hook;
+- D04 is mounted inside that same Uvicorn process;
+- `hedge-engine-shadow.service` is enabled at boot and uses
+  `Restart=always`.
+
+Therefore a normal reboot can restore Tailscale while leaving D03/D04
+unavailable until Uvicorn is deliberately started. Dashboard reboot persistence
+is a confirmed gap, not a pending question.
 
 ### Total server loss
 
@@ -319,7 +342,7 @@ Some duplication is intentional; some is historical.
 2. `nifty-multi-shadow-dashboard.service` name is misleading because it serves both NIFTY and MCX.
 3. historical `mcx-paper-live.service` remains installed but disabled.
 4. NIFTY uses a hybrid untracked runtime tree while its checkout HEAD is old.
-5. `/v2/` may duplicate or obsolete part of D03; not yet proven.
+5. `/v2/` is proven to be a distinct frontend in the same application; functional overlap with D03 remains to be assessed.
 6. `etf-invest-engine` contains both the live ETF production system on `main` and separate NIFTY research work on other branches, making repo-name-only ownership ambiguous.
 7. two untracked hedge-engine deployment tarballs were observed on `chartink-paper`.
 
@@ -332,11 +355,13 @@ Cleanup is allowed only after dependency proof.
 ### Phase 1 — complete mapping
 
 Pending:
-- fresh `lakshmidevi` runtime/route audit;
-- D04 ownership;
-- `lakshmidevi` restart/autostart proof;
-- Cloudflare control-endpoint authentication review;
-- off-server backup/restore matrix for all local mutable data.
+- reconcile intended live ETF production branch with the observed
+  `platform-v2-v03-preimplementation-20260916` checkout and weekday hard reset
+  to `origin/main`;
+- design/test deliberate D03/D04 reboot autostart;
+- compare D03 and D04 feature coverage before any route retirement;
+- Cloudflare control-endpoint authentication review on `chartink-paper`;
+- off-server backup/restore matrix and restore testing for all local mutable data.
 
 ### Phase 2 — dependency graph
 

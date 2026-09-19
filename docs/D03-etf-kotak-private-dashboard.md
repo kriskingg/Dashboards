@@ -1,7 +1,7 @@
 # D03 — ETF / Kotak Private Operator Dashboard
 
-**Status:** SOURCE + NETWORK ARCHITECTURE PROVEN; CURRENT DEPLOYED BYTES RE-VERIFICATION PENDING  
-**GitHub verification:** 2026-09-19  
+**Status:** LIVE RUNTIME + PRIVATE INGRESS PROVEN; DEPLOYED CHECKOUT DIFFERS FROM `main`  
+**Runtime verification:** 2026-09-19  
 **Production URL:** `https://etf-trader.tailabfd53.ts.net/`
 
 ## Purpose
@@ -72,15 +72,20 @@ Repository documentation and startup scripts use:
 ```text
 Runtime checkout: /home/ubuntu/kotak
 Repository:       kriskingg/etf-invest-engine
-Branch:           main
+Observed branch:  platform-v2-v03-preimplementation-20260916
+Observed HEAD:    306bd5c20dc48c682dab8c85ce1b2c677f97f66a
 Application:      src.dashboard.app_pro:app
 ```
 
-The current GitHub `main` HEAD observed during this source review was:
+Current GitHub `main` was independently verified on 2026-09-19 at:
 
 ```text
-b1485952fd9dc5846629c59134bfda9bb9765c21
+56a5a1bb666ed76bd1a0ab253c897eda324547c3
 ```
+
+The server-local `origin/main` ref was stale at
+`b1485952fd9dc5846629c59134bfda9bb9765c21` because the read-only audit
+intentionally did not fetch.
 
 The operational status document records that the dashboard ingress cutover itself was validated on commit:
 
@@ -178,6 +183,17 @@ These are authoritative GitHub source identities, not yet a claim that the curre
 8. verifies Serve proxies to `http://127.0.0.1:8080`;
 9. fails closed if private ingress is unhealthy.
 
+### Observed current startup ownership
+
+The running Uvicorn process was traced to an SSH login session
+(`session-767.scope`), not an enabled dashboard service. No system-level
+dashboard systemd unit, user-level systemd unit, `@reboot` cron entry, or shell
+startup hook was found.
+
+Therefore the script defines a safe launch contract, but **reboot autostart is
+not currently established**. Tailscale may return after reboot while the
+loopback origin remains down.
+
 ## Security boundary
 
 The dashboard can contain live broker capabilities behind server-side feature gates. This must not be confused with the NIFTY options paper-research engine, which has no broker order authorization.
@@ -192,33 +208,28 @@ D03 live ETF/Kotak dashboard:
 private Tailscale Serve -> etf-trader/lakshmidevi:8080
 ```
 
-## Remaining runtime proof
+## Fresh runtime verification result
 
-Before marking D03 `PROVEN_BYTE_IDENTICAL`, verify directly on `141.148.219.153`:
+The 2026-09-19 read-only audit directly proved:
 
-- hostname and Tailscale node identity;
-- current checkout remote/branch/HEAD;
-- current remote `main` SHA via read-only `git ls-remote`;
-- working-tree status;
-- actual Uvicorn PID/cwd/cmdline;
-- Tailscale Serve route;
-- all tracked `src/dashboard/` files against deployed HEAD;
-- critical source Git blobs against current GitHub;
-- no public Cloudflare process;
-- local `/api/health` response.
+- hostname/Tailscale identity;
+- Tailscale Serve tailnet-only -> `127.0.0.1:8080`;
+- Uvicorn PID/cwd/cmdline;
+- no cloudflared process/service;
+- exact deployed branch/HEAD;
+- D04 route ownership;
+- current dashboard startup ownership.
 
-A read-only Antigravity audit was dispatched as:
+It also proved the deployed checkout is intentionally/dynamically different from
+the current `main` branch. Therefore the correct state is not
+`PROVEN_BYTE_IDENTICAL_TO_MAIN`; the important issue is the branch discrepancy
+and the weekday hard-reset behavior.
 
-```text
-DASHBOARD-ETF-RUNTIME-VERIFY-20260919-002
-```
+The weekday 08:57 IST cron runs `git fetch origin` followed by
+`git reset --hard origin/main`. Reconcile intended production authority before
+that behavior is treated as safe branch normalization.
 
-Until it returns, the correct confidence is:
-
-```text
-SOURCE + NETWORK ARCHITECTURE PROVEN
-CURRENT DEPLOYED BYTE EQUIVALENCE PENDING
-```
+See [LAKSHMIDEVI_RUNTIME_VERIFICATION_2026-09-19.md](LAKSHMIDEVI_RUNTIME_VERIFICATION_2026-09-19.md).
 
 ## Data and recovery boundary
 
@@ -238,12 +249,19 @@ The host also has local operational state/config:
 /home/ubuntu/kotak/data/session_store.json
 /home/ubuntu/kotak/data/dashboard_runtime.env
 /home/ubuntu/kotak/data/dashboard_config.json
+/home/ubuntu/kotak/data/platform_v2_operational.db
 /home/ubuntu/kotak/data/logs/
 /home/ubuntu/kotak/data/research/
+/var/lib/hedge-engine/
 ```
 
 A reboot normally preserves the boot disk. Total VM loss does not preserve all
 of those local files unless they are recreated or separately backed up.
+
+The audit found no scheduled off-VM application backup in user cron/custom
+systemd. One historical same-disk archive
+(`/home/ubuntu/kotak-backup-20260601-061813.tar.gz`) was present, but it is
+not VM-loss protection and does not prove restore testing.
 
 The older "zero state on disk" disaster-recovery statement in
 `etf-invest-engine` is now being corrected to mean **core live ETF strategy

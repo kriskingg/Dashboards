@@ -33,13 +33,15 @@ Browser URL
 |---|---|---|---|---|---|
 | D01 | [NIFTY Paper Research](docs/D01-nifty-paper-research.md) ([full code/runtime architecture](docs/D01-CODE-AND-RUNTIME-ARCHITECTURE.md)) | **RUNTIME SOURCE CURRENT; CHECKOUT HEAD STALE** | `chartink-paper` / `80.225.234.65` | `/opt/chartink-paper/nifty-options-v2` | `kriskingg/etf-invest-engine` / `chatgpt/statistical-options-buying-basket-v1` |
 | D02 | [MCX / Silver Hedge Research](docs/D02-mcx-silver-hedge.md) | **PROVEN CURRENT RUNTIME** | `chartink-paper` / `80.225.234.65` | `/opt/hedge-engine` | `kriskingg/hedge-engine` / `main` |
-| D03 | **LIVE ETF/Kotak operator dashboard** `/` | Runtime verification pending | `lakshmidevi` / `141.148.219.153` | expected `/home/ubuntu/kotak` | `kriskingg/etf-invest-engine` / `main` |
-| D04 | ETF dashboard `/v2/` | Route ownership pending | `lakshmidevi` / `141.148.219.153` | pending runtime proof | pending runtime proof |
+| D03 | [LIVE ETF/Kotak operator dashboard `/`](docs/D03-etf-kotak-private-dashboard.md) | **LIVE RUNTIME PROVEN; DEPLOYED CHECKOUT != MAIN** | `lakshmidevi` / `141.148.219.153` | `/home/ubuntu/kotak`, Uvicorn `127.0.0.1:8080` | `kriskingg/etf-invest-engine`; observed branch `platform-v2-v03-preimplementation-20260916` |
+| D04 | [ETF dashboard `/v2/`](docs/D04-etf-dashboard-v2.md) | **ROUTE OWNERSHIP PROVEN; SAME PROCESS, DISTINCT FRONTEND** | `lakshmidevi` / `141.148.219.153` | same Uvicorn process; static mount from `web/dist` | same `etf-invest-engine` runtime |
 
 Start with [MASTER_SYSTEM_MAP.md](docs/MASTER_SYSTEM_MAP.md) for the four-URL,
 two-host, code/data/recovery/security/cleanup view.
 
 Fresh `chartink-paper` evidence is in [CHARTINK_PAPER_RUNTIME_VERIFICATION_2026-09-19.md](docs/CHARTINK_PAPER_RUNTIME_VERIFICATION_2026-09-19.md).
+
+Fresh `lakshmidevi` evidence is in [LAKSHMIDEVI_RUNTIME_VERIFICATION_2026-09-19.md](docs/LAKSHMIDEVI_RUNTIME_VERIFICATION_2026-09-19.md).
 
 See [OWNERSHIP_MAP.md](docs/OWNERSHIP_MAP.md) for the evidence-oriented master table and [SERVER_TOPOLOGY.md](docs/SERVER_TOPOLOGY.md) for physical/logical server placement.
 
@@ -60,3 +62,4 @@ This repository exists to prevent those classes of mistake.
 - Initial registry created: **2026-09-18**
 - MCX source-ownership findings added from GitHub: **2026-09-19**
 - Fresh `chartink-paper` runtime audit recorded: **2026-09-19**
+- Fresh `lakshmidevi` D03/D04 runtime audit recorded: **2026-09-19**

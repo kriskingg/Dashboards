@@ -9,7 +9,7 @@ The current documentation identifies two different OCI VMs. Current terminology 
 | Server role | Host identity | Public IP | Other known IP | Primary dashboard responsibility |
 |---|---|---:|---|---|
 | Research host | `chartink-paper` | `80.225.234.65` | OCI private `10.0.0.71` | NIFTY paper research + MCX/Silver paper research serving/publishing |
-| Live ETF/Kotak server | `lakshmidevi` / Tailscale node `etf-trader` | `141.148.219.153` | Tailscale `100.120.194.42` at 2026-09-15 verification | Private ETF/Kotak live operator dashboard |
+| Live ETF/Kotak server | `lakshmidevi` / Tailscale node `etf-trader` | `141.148.219.153` | Tailscale `100.120.194.42` at 2026-09-19 verification | Private ETF/Kotak live operator dashboard |
 
 These are **not the same VM**.
 
@@ -103,7 +103,7 @@ Public OCI IP:      141.148.219.153
 Host identity:      lakshmidevi
 Tailscale hostname: etf-trader
 MagicDNS:           etf-trader.tailabfd53.ts.net
-Tailscale IPv4:     100.120.194.42   (at 2026-09-15 verification)
+Tailscale IPv4:     100.120.194.42   (verified 2026-09-19)
 Origin:             http://127.0.0.1:8080
 Ingress:            Tailscale Serve, tailnet-only HTTPS 443
 Public Cloudflare:  disabled
@@ -131,43 +131,59 @@ http://127.0.0.1:8080
 FastAPI/Uvicorn
 src.dashboard.app_pro:app
      |
-runtime checkout documented as:
+runtime checkout observed as:
 /home/ubuntu/kotak
+branch platform-v2-v03-preimplementation-20260916
+HEAD 306bd5c20dc48c682dab8c85ce1b2c677f97f66a
      |
-GitHub:
+GitHub repository:
 kriskingg/etf-invest-engine
-main
+intended production branch: main
 ```
 
 The startup script explicitly validates the exact Tailscale node name and refuses to recreate a public Cloudflare fallback.
 
-Source ownership and network architecture are strongly documented. The
-`etf-invest-engine/main` branch is also the live ETF/MTF production strategy
-branch, including Pair 1/2/3, KnowYourPNL, DynamoDB campaign integration and
-cron. A fresh byte-for-byte server verification is required before this registry
-claims the current deployed working tree exactly matches the current GitHub
-`main` HEAD.
+Fresh 2026-09-19 runtime proof established the live Uvicorn process,
+loopback binding, Tailscale Serve mapping, absence of cloudflared and exact
+checkout branch/HEAD. The observed checkout does **not** match current GitHub
+`main`: it is on `platform-v2-v03-preimplementation-20260916` at
+`306bd5c...`. The weekday 08:57 IST deployment job fetches and hard-resets the
+checkout to `origin/main`, so this branch discrepancy is an operational issue
+to reconcile before cleanup.
 
 For ports, persistence, restart behavior, Internet exposure, backup gaps and
 cleanup candidates, see [MASTER_SYSTEM_MAP.md](MASTER_SYSTEM_MAP.md).
 
 ### D04 — `/v2/`
 
-Known URL:
+Fresh 2026-09-19 runtime proof established:
 
 ```text
 https://etf-trader.tailabfd53.ts.net/v2/
+     |
+same Tailscale Serve
+     |
+same http://127.0.0.1:8080
+     |
+same src.dashboard.app_pro:app
+     |
+FastAPI StaticFiles mount
+     |
+/home/ubuntu/kotak/web/dist
 ```
 
-Its exact current route ownership must be established from the running `etf-trader` server rather than assumed from the common hostname. The runtime verification job must determine whether `/v2/` is:
+D04 is a distinct compiled frontend inside the D03 application. It is not a
+separate process, Tailscale route, or strategy engine.
 
-- a FastAPI route in the same application;
-- a Tailscale Serve path-specific proxy;
-- a static/legacy route;
-- a redirect/alias;
-- or no longer present.
+Observed assets:
 
-Until that runtime route trace is complete, D04 remains independently marked **PARTIAL/UNMAPPED**.
+```text
+web/dist/index.html
+web/dist/assets/index-CDny3836.js
+web/dist/assets/index-BquxAb8W.css
+```
+
+See [D04-etf-dashboard-v2.md](D04-etf-dashboard-v2.md).
 
 ## Cross-server relationship
 
@@ -182,28 +198,22 @@ chartink-paper
 LIVE ETF/KOTAK
 lakshmidevi / etf-trader
 141.148.219.153
-Tailscale 100.120.194.42 (verified 2026-09-15)
+Tailscale 100.120.194.42 (verified 2026-09-19)
   |
-  +-- D03 /
-  +-- D04 /v2/  [exact route owner pending runtime proof]
+  +-- D03 /      -> root live dashboard
+  +-- D04 /v2/   -> distinct compiled frontend in same Uvicorn app
 ```
 
 The two groups must not be treated as one server merely because source code in `kriskingg/etf-invest-engine` references both systems.
 
-## Runtime verification jobs
+## Runtime verification status
 
-Two read-only Antigravity audits were dispatched on 2026-09-19:
+Both hosts now have direct read-only runtime evidence recorded on 2026-09-19.
 
-```text
-DASHBOARD-RUNTIME-VERIFY-20260919-001
-Target: 80.225.234.65 / chartink-paper
-Scope: D01 + D02, full request path and byte-equivalence audit
+- `chartink-paper`: D01/D02 ownership and runtime provenance recorded in
+  [CHARTINK_PAPER_RUNTIME_VERIFICATION_2026-09-19.md](CHARTINK_PAPER_RUNTIME_VERIFICATION_2026-09-19.md).
+- `lakshmidevi`: D03/D04 route/process/checkout/durability evidence recorded in
+  [LAKSHMIDEVI_RUNTIME_VERIFICATION_2026-09-19.md](LAKSHMIDEVI_RUNTIME_VERIFICATION_2026-09-19.md).
 
-DASHBOARD-ETF-RUNTIME-VERIFY-20260919-002
-Target: 141.148.219.153 / lakshmidevi / etf-trader
-Scope: D03 + D04, Tailscale route mapping and byte-equivalence audit
-```
-
-The audits are read-only. They are specifically forbidden from pulling code, restarting services, changing Tailscale/Cloudflare state, or calling broker order endpoints.
-
-Do not promote a surface to `PROVEN_BYTE_IDENTICAL` until its corresponding runtime audit has returned actual deployed-byte evidence.
+No audit authorized code pulls, service restarts, network changes, broker order
+calls, cleanup or branch normalization.
