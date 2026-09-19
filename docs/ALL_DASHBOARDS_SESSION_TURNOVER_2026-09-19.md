@@ -762,6 +762,65 @@ Do not:
 
 ---
 
+
+# Future universal quality-gate architecture
+
+A future cross-dashboard quality framework should be **repository-aware, language-aware, local-state-aware, and sandboxed by default**.
+
+The objective is not merely to run every available test command. The framework must first determine what code and state are actually being tested, then isolate that state before executing tests.
+
+Required design:
+
+1. inspect the real local workspace before testing;
+2. inventory Git HEAD, tracked modifications, untracked files, ignored files, local datasets, databases, configuration, generated artifacts, and secrets;
+3. classify discovered files/state into:
+   - tracked Git source;
+   - meaningful local unpublished source;
+   - required local runtime/data state;
+   - secrets/generated/cache artifacts that must not be copied blindly;
+4. never delete, reset, or clean meaningful local-only source merely to obtain a clean test checkout;
+5. create a disposable sandbox, preferably using a Git worktree plus an explicit overlay/snapshot of approved local-only source;
+6. record hashes of local-only source included in the sandbox so a PASS cannot be misreported as reproducible from GitHub when it is not;
+7. use isolated test databases/data directories/ports rather than normal runtime state;
+8. replace or block production credentials, real broker endpoints, and mutable production-like services;
+9. deny network access by default for unit/static tests and allow only explicitly approved integration dependencies;
+10. detect repository languages/frameworks and run only applicable open-source checks;
+11. separate test tiers:
+    - **Safe**: static analysis, syntax/type checks, unit tests, builds;
+    - **Full**: approved integration/API/browser tests against isolated test state;
+    - **Deep**: coverage, property/fuzz tests, dependency/security scanning, mutation testing, and performance tests;
+12. produce one machine-readable report containing:
+    - Git commit tested;
+    - local modifications/local-only source included;
+    - data/database snapshot identity;
+    - tests/checks executed;
+    - PASS/FAIL/SKIP counts;
+    - forbidden production resources confirmed absent;
+13. preserve failed sandboxes/logs for diagnosis; successful sandboxes may be discarded after evidence is recorded.
+
+Indicative open-source tool mapping:
+- Python: pytest, coverage.py, Ruff, mypy, Hypothesis;
+- JavaScript/TypeScript/React/Vite: Vitest, TypeScript, ESLint/Oxlint, Playwright;
+- PowerShell: Pester;
+- Bash: ShellCheck, Bats;
+- Terraform/OpenTofu: fmt, validate, native tests;
+- Ansible: ansible-lint, Molecule;
+- Java: JUnit through Maven/Gradle;
+- Go: go test/go vet;
+- Rust: cargo test/clippy;
+- .NET: dotnet test;
+- SQL/YAML/Docker: SQLFluff, yamllint, Hadolint;
+- API contracts: Schemathesis/OpenAPI tests;
+- dependency/security: OSV-Scanner and Gitleaks;
+- test-strength/performance where appropriate: mutation testing and Locust.
+
+Dashboard-specific safety contracts remain mandatory. In particular, D03/D04 quality runs must make real broker orders physically unavailable; D01/D02 must preserve paper/shadow boundaries; D05/D06 must use isolated local data/database state.
+
+A recent D05 full-suite run demonstrated why this architecture is necessary: a test intended to be non-mutating entered the production updater path and performed a real AMFI reconciliation against the normal local research state. Future universal quality-gate work must prevent a generic test run from mutating normal runtime state even when a test is incorrectly written.
+
+---
+
+
 # Recommended work order from this handoff
 
 The current highest-priority local consolidation task is D05 because its source is already preserved and the integration work is staged.
