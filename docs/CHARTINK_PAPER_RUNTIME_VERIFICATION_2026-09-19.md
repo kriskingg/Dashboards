@@ -455,7 +455,7 @@ https://triumph-events-chair-problems.trycloudflare.com
 
 No evidence from this audit supports treating the shared HTTP/control server as the generator owner of both applications.
 
-## 6. chartink-paper audit closure
+## 6. Dashboard ownership closure
 
 All requested `chartink-paper` provenance questions are now resolved.
 
@@ -469,3 +469,181 @@ D02:
 - installed systemd unit differs only by CRLF versus LF line endings.
 
 No further `chartink-paper` verification is required for dashboard ownership mapping.
+
+## 7. Cloudflare reboot and hostname durability
+
+Fresh final-gap evidence proved:
+
+```text
+service: cloudflared-tunnel.service
+enabled: yes
+active: yes
+Restart=always
+ExecStart:
+/usr/bin/cloudflared tunnel --url http://127.0.0.1:8765 --logfile /var/log/cloudflared.log
+```
+
+The current process started on 2026-08-17 and has remained running. Retained
+logs showed only the current hostname:
+
+```text
+triumph-events-chair-problems.trycloudflare.com
+```
+
+This is a **Quick Tunnel**, not a named tunnel. Cloudflare's current
+documentation states that Quick Tunnels generate a random
+`*.trycloudflare.com` subdomain and are intended for testing/development, not
+production. Therefore the current hostname is not a durable recovery address and
+a fresh cloudflared process must be expected to obtain a new random hostname.
+
+## 8. Public control-surface security
+
+The shared server source at
+`/opt/chartink-paper/mcx-paper-research/mcx_paper/control_server.py` has
+SHA-256:
+
+```text
+597ed799d3267f93f69751f2072d8db0ec31627094bf1d6f0c78080538a607e0
+```
+
+Observed methods/path:
+
+```text
+GET  /api/mcx-paper-control
+POST /api/mcx-paper-control
+```
+
+GET returns the control state. POST ultimately calls
+`atomic_control(... enabled=action == "start")` and therefore mutates the
+control file.
+
+The POST checks a fixed header:
+
+```text
+X-Paper-Control: local-dashboard
+```
+
+and also inspects `Origin`. No secret/token/password/API-key authentication
+identifier was detected by the source audit. A fixed client header and Origin
+validation are not strong authentication controls for an Internet-facing
+endpoint: non-browser clients can supply their own headers. Treat this as a
+**security remediation blocker**.
+
+The Quick Tunnel proxies the entire local HTTP origin. Public read-only tests
+proved both dashboards reachable through the Internet-facing hostname:
+
+```text
+/live_latest.html  -> HTTP 200
+/mcx_latest.html   -> HTTP 200
+```
+
+No mutating POST was executed during the audit.
+
+Preferred target architecture for later review: keep public/static research
+viewing separate from any mutating operator-control API, or protect the control
+surface with a deliberate authenticated/private access boundary. No runtime
+change was made by this audit.
+
+## 9. Failed scheduled NIFTY units
+
+Three failed units are not equivalent.
+
+### nifty-multi-shadow.service — active operational defect
+
+Its timer is enabled and schedules 15:50 IST weekdays. The service failed on
+Sep 15, 16, 17 and 18 at:
+
+```text
+sqlite3.OperationalError: unable to open database file
+```
+
+The current GitHub `run_daily.sh` selects:
+
+```text
+/var/lib/chartink-paper/nifty-options-v2/data/research-YYYY-MM-DD.sqlite3
+```
+
+and the quality code opens it read-only before `PRAGMA integrity_check`.
+Because the failure repeats on an enabled scheduled path, classify it as an
+**active operational defect** until the physical runtime path/permission/WAL
+cause is proven and fixed.
+
+### nifty-options-v2-replay.service — broken scheduled path / retirement candidate
+
+The service itself is disabled, but
+`nifty-options-v2-replay.timer` is **enabled** and triggers it every weekday at
+15:40 IST. Sep 15-18 all failed with:
+
+```text
+status=203/EXEC
+```
+
+The timer therefore makes the disabled service relevant. Do not call it harmless
+legacy residue yet. First verify the deployed executable path and decide whether
+this replay is still part of the intended pipeline; then either repair it or
+retire timer+service together under an approved cleanup.
+
+### nifty-multi-shadow-evidence-exporter.service — evidence-delivery defect
+
+The exporter successfully verified remote publication for many older COMPLETE
+sessions. Historical INCOMPLETE sessions with manifests are correctly left
+unpublished. However the Sep 18 run recorded eight operational failures for
+Sep 8-18 sessions where the exporter reported INCOMPLETE / zero files and then
+produced no manifest.
+
+Therefore:
+
+```text
+older COMPLETE evidence: remote publication verified
+recent evidence delivery: unhealthy / incomplete
+service result: failed
+timer: enabled, multiple weekday retries
+```
+
+This is a research-evidence delivery problem, not a trading-engine tuning
+problem.
+
+## 10. Mutable MCX state and boot-volume durability
+
+Fresh inventory under `/var/lib/hedge-engine` measured about 26 MiB and
+included:
+
+```text
+data/mcx_scrip_master.csv              ~25.7 MB
+data/dashboard_price_history.jsonl     ~867 KB
+executions/execution_history.jsonl
+state/runtime_checkpoint.json
+state/etf_ledger.json
+state/strategy_state.json
+state/runtime_health.json
+reports/mcx_latest.html
+backups/backup_*/
+```
+
+The live `hedge_engine.runtime.paper_loop` updates state/report files and the
+published MCX dashboard.
+
+`findmnt` proved `/var/lib/hedge-engine`, `/opt/hedge-engine`,
+`/var/lib/chartink-paper` and `/opt/chartink-paper` all resolve to the VM
+root filesystem on `/dev/sda1` (ext4). Thus this mutable state survives an
+ordinary reboot if the boot volume survives, but is not independently
+VM-loss-safe without boot-volume or off-server backup.
+
+Local pre-deploy/runtime backups under `/var/lib/hedge-engine/backups` are on
+the same filesystem and do not create a separate failure domain.
+
+## 11. Remaining durability unknowns
+
+Two inputs remain before declaring the chartink-paper durability audit fully
+closed:
+
+1. `/var/lib/chartink-paper` reports only 4 KiB even though live processes use
+   `nifty-multi-shadow/reports` and `mcx-paper/control.json`. The audit's
+   non-following `find` did not enumerate NIFTY mutable data. Resolve the
+   symlink/physical targets and measure them before finalizing NIFTY raw-data
+   durability.
+2. OCI boot-volume backup policy and existing boot-volume backups remain
+   **UNKNOWN** from the host because OCI CLI is not installed. Verify from OCI
+   control-plane evidence rather than installing tooling solely for the audit.
+
+Dashboard/code ownership is closed; security/durability cleanup is not.
