@@ -27,6 +27,10 @@ Browser URL
 - A deployed runtime copy may differ structurally from the authoritative Git-tracked source; document both.
 - Before modifying a dashboard, identify its row in the ownership map and confirm the current branch/commit again.
 
+## Session handoff
+
+For continuation across ChatGPT sessions and work spanning more than one dashboard, read [docs/ALL_DASHBOARDS_SESSION_TURNOVER_2026-09-19.md](docs/ALL_DASHBOARDS_SESSION_TURNOVER_2026-09-19.md) first. It records all six dashboards, current GitHub refs, last-known runtime boundaries, pending work, and safety gates.
+
 ## Canonical dashboard pages
 
 Use [docs/dashboards/README.md](docs/dashboards/README.md) as the page index.
