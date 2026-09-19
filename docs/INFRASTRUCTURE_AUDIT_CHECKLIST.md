@@ -127,11 +127,11 @@ destroy provenance; current prose should identify the host explicitly.
 
 ### Remaining inputs before final durability closure
 
-- [ ] Resolve the physical targets behind `/var/lib/chartink-paper/*`.
-      The root reports only 4 KiB while live processes use subpaths, strongly
-      indicating symlinked runtime roots; the previous `find` inventory did
-      not follow them. Capture the symlink targets and sizes before claiming a
-      complete NIFTY mutable-data inventory.
+- [ ] Complete the NIFTY mutable-data inventory using root or
+      `chartink-paper` read access. The latest audit proved the parent
+      `/var/lib/chartink-paper` is mode `0700`, owned by
+      `chartink-paper`; the earlier `ubuntu` inventory could not traverse it.
+      The 4 KiB result was not evidence of symlinks.
 - [ ] Verify OCI boot-volume backup policy/existing backups from the OCI control
       plane. The host has no OCI CLI and cannot prove this itself.
 - [ ] Record whether an actual restore drill has ever been completed for the
@@ -146,6 +146,8 @@ destroy provenance; current prose should identify the host explicitly.
 - [ ] Reboot/startup matrix.
 - [ ] Source/deployed-SHA ownership matrix.
 - [ ] Data-retention and writer matrix.
+- [x] Dashboard code-change ownership map.
+- [x] Repository-boundary/migration decision register.
 - [ ] Documentation-versus-runtime discrepancy list.
 - [ ] Cleanup candidate list with dependency proof and rollback requirement.
 
