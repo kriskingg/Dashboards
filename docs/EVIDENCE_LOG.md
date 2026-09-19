@@ -392,3 +392,102 @@ Runtime deployment SHA: NOT RE-VERIFIED IN THIS REVIEW
 Serving layer: shared mcx_paper.control_server
 Ingress: shared Cloudflare quick tunnel
 ```
+
+---
+
+## 2026-09-19 — Server 1 Final Byte-Level Closure
+
+### NIFTY runtime dashboard blob
+
+Direct server command:
+
+```text
+git hash-object analysis/nifty_multi_shadow/dashboard.py
+```
+
+returned:
+
+```text
+a6757e3087e643b0ac75f41ce993e371b3aac35b
+```
+
+The old tracked checkout copy returned:
+
+```text
+7a4a959784662ded8aec18b1c50c70585d2faa94
+```
+
+Fresh GitHub verification for the current production branch returned:
+
+```text
+branch:
+chatgpt/statistical-options-buying-basket-v1
+
+HEAD:
+f9a8fe8a22173fcda902bcbc2f8fd3a4da4defa5
+
+dashboard.py blob:
+a6757e3087e643b0ac75f41ce993e371b3aac35b
+```
+
+Therefore the executable runtime `dashboard.py` is exactly the current GitHub version even though the checkout HEAD remains `97f51a8...`.
+
+GitHub commit comparison `97f51a8... -> f9a8fe8...` changes only:
+
+```text
+nifty-options-paper-research/analysis/nifty_multi_shadow/dashboard.py
+nifty-options-paper-research/analysis/test_nifty_dashboard_v2.py
+```
+
+The runtime recursive comparison against the old tracked application tree reported only `dashboard.py` as different. The test file is outside the executable runtime source tree.
+
+Conclusion:
+
+```text
+NIFTY executable runtime source: CURRENT
+NIFTY checkout metadata: STALE/HYBRID
+```
+
+### MCX installed systemd unit classification
+
+Repository unit SHA-256:
+
+```text
+3d886c4fd79856f25a23719f2c8eed4746e88af15877df3711072b2e2e5c1852
+```
+
+Installed unit SHA-256:
+
+```text
+5a659e331364f5d49c7d34ee089f3e3e7595d20e633d9dfadd5da180c135f66c
+```
+
+A direct unified diff showed every logical line identical. Byte-level `cmp -l` showed the repository newline byte `0x0A` corresponds to `0x0D 0x0A` in the installed file.
+
+Classification:
+
+```text
+repository: LF line endings
+installed:  CRLF line endings
+semantic content: IDENTICAL
+```
+
+Therefore the systemd mismatch is non-semantic formatting drift only.
+
+### Server 1 final confidence
+
+```text
+D01 NIFTY:
+ownership             PROVEN
+runtime application   CURRENT
+checkout metadata     STALE/HYBRID
+
+D02 MCX:
+ownership             PROVEN
+tracked runtime       PROVEN_BYTE_IDENTICAL
+GitHub main           SAME DEPLOYED SHA
+published HTML        BYTE-IDENTICAL TO PRIMARY AT COMPARISON
+installed unit        SEMANTICALLY IDENTICAL; CRLF-ONLY DIFFERENCE
+```
+
+No further Server-1 ownership verification is required.
