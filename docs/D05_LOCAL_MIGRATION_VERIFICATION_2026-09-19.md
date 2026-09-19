@@ -80,6 +80,34 @@ D05 tracked differences between old and new: 0
 
 This verifies preservation of the tracked application source during migration.
 
+## Post-migration local-source preservation
+
+The migration was followed by a separate source audit so that unpublished application work would not be lost while generated/local data stayed out of Git.
+
+The audit identified the meaningful local source delta as:
+
+- 10 modified tracked source files;
+- 1 new backend regression test;
+- 2 application assets.
+
+These 13 files were explicitly staged and committed as:
+
+```text
+branch: preserve/d05-local-source-20260919
+commit: 478e7a018ba0d587915445d4f7decfb056c63a0d
+```
+
+The branch was pushed to GitHub and is the preservation point for the pre-integration local source. After that commit, the tracked working-tree content had no real diff from the preservation commit.
+
+A separate D05 path-cleanup branch/PR also exists:
+
+```text
+branch: chatgpt/d05-path-cleanup-20260919
+PR:     #1
+```
+
+That work is not yet treated as merged authority. It must be reconciled with the preservation branch and validated before `main` changes.
+
 ## Python environment correction
 
 The inherited virtual environment resolved through the former junction target, so it was intentionally replaced.
@@ -133,15 +161,17 @@ The local D05 tree contains or may contain substantial non-source material, incl
 
 These may remain local and are not automatically Git content merely because they are physically under the repository directory.
 
-Until the staging/ignore audit is complete:
+The source/data boundary audit is now complete enough to establish the operating rule:
 
 ```text
-DO NOT use: git add .
-DO NOT use: git add -A
-DO NOT bulk-push generated/runtime data
+GitHub: source, tests, scripts, schemas, current docs and small required assets
+Local:  NAV/bhav/history data, Parquet, live DB state, logs, caches,
+        environments, dependency trees, ZIPs/backups and generated results
 ```
 
-Use explicit source-file staging after reviewing `.gitignore` and untracked/non-ignored files.
+The audit found no Git-tracked file larger than 20 MB. Repository ignores already cover the main heavy-data/runtime classes such as `data/`, Parquet, compressed CSV, database files, logs, environments, dependency/build output and ZIPs. Plain `.csv` is not globally ignored and must be classified before staging.
+
+Continue using explicit source-file staging. Do not use blind `git add .` / `git add -A` when the working tree contains local data or generated artifacts.
 
 ## Safety backups
 
