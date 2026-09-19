@@ -479,7 +479,7 @@ Important test-safety corrections included in the merge:
 - `app/backend/requirements-test.txt` declares backend test dependencies.
 
 Remaining administrative follow-up:
-- switch/pull the local checkout to merged `main` when convenient;
+- local checkout has now been switched/pulled to merged `main` at `d25165a31e8a64e8f9814f0f58aa8366ffce2a0c`;
 - keep migration backups until explicit cleanup approval;
 - do not delete preservation/integration branches solely because the merge completed.
 
@@ -657,7 +657,7 @@ https://github.com/kriskingg/Dashboards/blob/main/docs/dashboards/D06-INVESTMENT
 
 The user can simply say:
 
-> Continue D05 from the turnover page. Verify current GitHub state first, then continue with the preservation + path-cleanup integration. Do not merge or delete anything until the combined branch is reviewed and tested.
+> D05 consolidation is complete. Verify `mf-analytics-source/main` and the local checkout still match `d25165a31e8a64e8f9814f0f58aa8366ffce2a0c` before any new D05 change. Do not delete migration backups or preservation branches without explicit cleanup review.
 
 The next session should read this page first, then inspect the live GitHub refs before giving commands.
 
@@ -696,8 +696,10 @@ D:\Dhan\Mutual_funds
 
 ## Handoff status
 
-**Current phase:** source preserved; path cleanup prepared; combined integration not yet performed.
+**Current phase:** D05 source preservation, integration, validation, GitHub merge, and local `main` synchronization are complete.
 
-**Do next:** verify local/GitHub state, create combined integration branch, resolve overlap, test, smoke-test, review, then merge.
+**Current authority:** `kriskingg/mf-analytics-source` `main` at `d25165a31e8a64e8f9814f0f58aa8366ffce2a0c`, with the local checkout at the same SHA and zero tracked legacy-path references.
 
-**Do not do next:** merge PR #1 directly, delete migration backups, bulk-stage generated data, or reset/clean the working tree destructively.
+**Do next:** no D05 code/migration work is pending. Retain migration backups until explicit cleanup approval, then continue the wider dashboard program with D06.
+
+**Do not do next:** delete migration backups, preservation branches, or generated/local data without explicit review.
