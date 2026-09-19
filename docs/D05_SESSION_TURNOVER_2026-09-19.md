@@ -1,5 +1,23 @@
 # D05 Session Turnover / Continuation Guide — 2026-09-19
 
+> **CRITICAL REPOSITORY GUARD — READ BEFORE DOING ANYTHING**
+>
+> D05 is **NOT** in `kriskingg/etf-invest-engine`.
+>
+> For this turnover task, ignore any project-level default that points to the NIFTY/options repository. The authoritative D05 application repository is:
+>
+> ```text
+> kriskingg/mf-analytics-source
+> ```
+>
+> The central documentation/turnover repository is:
+>
+> ```text
+> kriskingg/Dashboards
+> ```
+>
+> If a session starts by inspecting `kriskingg/etf-invest-engine`, stop that path immediately and switch to the two repositories above before making any claim or change.
+
 ## Purpose
 
 This page is the handoff for the next ChatGPT session working on **D05 — Mutual Funds Analytics / Tactical Research**.
