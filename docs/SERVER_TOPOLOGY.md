@@ -60,7 +60,7 @@ GitHub:
   branch chatgpt/statistical-options-buying-basket-v1
 ```
 
-D01 generator/runtime ownership was already proven on 2026-09-18, including matching Git blob hashes for the runtime `dashboard.py` and `live.py` versus the authoritative Git-tracked copies.
+Fresh 2026-09-19 proof established that the executable runtime `dashboard.py` blob is exactly `a6757e3087e643b0ac75f41ce993e371b3aac35b`, matching the current GitHub branch head. The checkout HEAD itself remains older (`97f51a8...`), so the deployment is a hybrid layout: current executable runtime source under the untracked top-level `analysis/` tree, stale checkout metadata underneath.
 
 ### D02 — MCX / Silver hedge research
 
@@ -92,7 +92,7 @@ GitHub:
 
 The hedge-engine migration runbook explicitly says the migration procedure runs on OCI node `80.225.234.65`.
 
-GitHub source ownership is proven. A fresh server-side byte comparison of the current `/opt/hedge-engine` deployment is being audited separately before the runtime is labeled fully byte-identical.
+Fresh 2026-09-19 proof established that every Git-tracked file in `/opt/hedge-engine` matches deployed HEAD `e10eeeda...`, and GitHub `main` is at the same commit. Primary and published MCX HTML copies matched byte-for-byte. The installed systemd unit differs from the repository copy only by CRLF versus LF line endings.
 
 ## Live ETF/Kotak server — lakshmidevi / etf-trader
 
