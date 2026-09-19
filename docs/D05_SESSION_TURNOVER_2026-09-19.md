@@ -438,6 +438,44 @@ That documentation intentionally omits temporary terminal/index troubleshooting 
 
 ---
 
+
+## 2026-09-19 continuation update
+
+The combined integration branch now exists:
+
+```text
+chatgpt/d05-integration-20260919
+```
+
+Current integration head after test-safety corrections:
+
+```text
+48ebe6f1f9e2bdfffbbb9356e58ff9e5a362abac
+```
+
+Completed since the original turnover:
+- preservation + path-cleanup combined;
+- README conflict deliberately resolved;
+- frontend/backend port references aligned to canonical port 8000;
+- tracked legacy path `D:\Dhan\Mutual_funds` reduced to zero;
+- trailing-whitespace defects corrected;
+- focused regression suite passed 9/9 locally;
+- full backend suite exposed three stale/unsafe tests, not production-algorithm failures;
+- updater regression tests were corrected so they cannot reach normal AMFI/database mutation paths;
+- lifecycle test path now derives from the repository root;
+- dynamic clean-equity universe test no longer hardcodes 817;
+- `app/backend/requirements-test.txt` now declares pytest/httpx2 test dependencies.
+
+Still required before merge:
+- rerun full backend test suite on the latest integration head;
+- frontend build + lint;
+- runtime smoke on 8000/5173;
+- verify canonical runtime path/no legacy process;
+- create/review combined PR;
+- merge only after validation;
+- then close/supersede PR #1 and update final Dashboards SHAs/evidence.
+
+
 ## What is still pending
 
 ### Highest-priority next task
