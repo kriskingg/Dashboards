@@ -61,7 +61,7 @@ Verified from GitHub on 2026-09-19 during this turnover:
 | D02 | `kriskingg/hedge-engine` / `main` | `e10eeeda6ea17a7a6c5bc62ad0877b01cf8ef071` |
 | D03 intended production | `kriskingg/etf-invest-engine` / `main` | `e52aa2ab7f8d4a260027778982b6abfe69203225` |
 | D03/D04 feature branch | `kriskingg/etf-invest-engine` / `platform-v2-v03-preimplementation-20260916` | `b2def17c7746656ede1a9514551fe276a21e7c40` |
-| D05 main | `kriskingg/mf-analytics-source` / `main` | `5366b9000d0f93af8e4e635b4fc551f0a85d0915` |
+| D05 main | `kriskingg/mf-analytics-source` / `main` | `d25165a31e8a64e8f9814f0f58aa8366ffce2a0c` |
 | D05 preserved local source | `preserve/d05-local-source-20260919` | `478e7a018ba0d587915445d4f7decfb056c63a0d` |
 | D05 path cleanup | `chatgpt/d05-path-cleanup-20260919` | `a7bd4c0903867f6b5e4d378a502f27480c3813fe` |
 | D06 | `kriskingg/investment-tracker-app` / `main` | `8f3a24bc7f30ae10d6695a6a292447351a7db5e9` |
@@ -385,39 +385,39 @@ Critical repository guard:
 Canonical local workspace:
 `D:\Git_repos\mf-analytics-source`
 
-Current GitHub refs:
-- `main`: `5366b9000d0f93af8e4e635b4fc551f0a85d0915`;
-- preserved local source: `478e7a018ba0d587915445d4f7decfb056c63a0d`;
-- path-cleanup branch: `a7bd4c0903867f6b5e4d378a502f27480c3813fe`;
-- combined integration branch: `chatgpt/d05-integration-20260919`, current head `48ebe6f1f9e2bdfffbbb9356e58ff9e5a362abac`.
+Current GitHub authority:
+- `main`: `d25165a31e8a64e8f9814f0f58aa8366ffce2a0c`;
+- combined PR #2 merged successfully;
+- preserved local source remains recoverable at `478e7a018ba0d587915445d4f7decfb056c63a0d`;
+- path-cleanup branch remains recoverable at `a7bd4c0903867f6b5e4d378a502f27480c3813fe`;
+- integration branch remains recoverable at `48ebe6f1f9e2bdfffbbb9356e58ff9e5a362abac`.
 
-Open path-cleanup PR:
-https://github.com/kriskingg/mf-analytics-source/pull/1
+Final validated integration evidence:
+- tracked legacy path `D:\Dhan\Mutual_funds`: zero;
+- `git diff --check`: PASS;
+- backend non-runtime suite: 197 passed, 24 intentionally skipped;
+- lifecycle/runtime suite: 3 passed;
+- frontend production build: PASS;
+- frontend lint: 0 errors, 19 warnings;
+- backend runtime `127.0.0.1:8000`: HTTP 200;
+- frontend runtime `127.0.0.1:5173`: HTTP 200;
+- legacy runtime path: zero;
+- working tree after validation: clean.
 
-Current D05 integration status:
-- preservation + path-cleanup are already combined on `chatgpt/d05-integration-20260919`;
-- deliberate overlap resolution is complete;
-- frontend/backend runtime references are aligned to canonical backend port 8000;
-- tracked legacy path check for `D:\Dhan\Mutual_funds` is zero;
-- `git diff --check` is clean after whitespace corrections;
-- focused preservation regressions passed 9/9 locally;
-- an initial full backend run completed with 197 passed, 24 skipped, and 3 failures; all three were diagnosed as test-environment/staleness defects rather than production-algorithm failures;
-- updater tests are now isolated from normal AMFI/database mutation paths;
-- lifecycle test now derives the canonical repository path dynamically;
-- Market Direction test no longer pins the dynamic clean-equity universe to stale count 817;
-- backend test dependencies are now declared in `app/backend/requirements-test.txt`.
+Test-safety/reproducibility corrections merged with D05:
+- updater regression tests are isolated from normal AMFI/database mutation paths;
+- lifecycle test derives the repository path dynamically;
+- Market Direction no longer hardcodes a stale clean-equity universe count;
+- backend test dependencies are declared in `app/backend/requirements-test.txt`.
 
-Pending D05 work:
-- pull the latest integration head locally and rerun the full backend suite;
-- run frontend production build and lint;
-- runtime smoke-test ports 8000/5173 and verify no legacy runtime path;
-- create/review the combined PR only after those validation gates pass;
-- merge only after code/test/runtime review;
-- close/supersede PR #1 only after the combined PR is safely merged;
-- update Dashboards with final merged SHA and post-merge validation evidence;
-- keep migration backups until final acceptance.
+PR state:
+- combined PR #2: merged;
+- former path-cleanup PR #1: superseded by the combined merge and no longer pending independently.
 
-Do not merge PR #1 independently before the combined branch is validated.
+Remaining D05 administrative work only:
+- update the local checkout to `main` at the merged SHA when convenient;
+- retain migration backups until explicit cleanup acceptance;
+- do not delete preservation/integration branches merely because the merge completed.
 
 ---
 
@@ -842,9 +842,9 @@ A recent D05 full-suite run demonstrated why this architecture is necessary: a t
 
 # Recommended work order from this handoff
 
-The current highest-priority local consolidation task is D05 because its source is already preserved and the integration work is staged.
+D05 repository consolidation is now merged and validated. The next highest-priority local consolidation task is D06.
 
-After D05:
+Next:
 1. audit/preserve D06 local unpublished source;
 2. re-verify D03/D04 live deployed branch/SHA before touching live ETF dashboard code;
 3. reconcile D03/D04 production/deployment authority and reboot startup;
@@ -873,7 +873,7 @@ Use:
 - Central registry: `kriskingg/Dashboards`.
 - Current GitHub source refs were re-verified during this turnover.
 - OCI runtime observations remain timestamped audit evidence and must be re-verified before deployment-sensitive work.
-- D05 integration is the immediate unfinished repository task.
+- D05 repository consolidation is merged and validated at `d25165a31e8a64e8f9814f0f58aa8366ffce2a0c`; only local-main sync and eventual backup cleanup remain administrative follow-up.
 - D06 local preservation remains pending.
 - D01-D04 each have documented runtime/ownership/security/durability work still open.
 - `etf-invest-engine/main` is explicitly protected as live ETF/MTF production strategy/domain code.
