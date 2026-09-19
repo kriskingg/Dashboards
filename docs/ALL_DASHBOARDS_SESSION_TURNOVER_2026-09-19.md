@@ -415,7 +415,7 @@ PR state:
 - former path-cleanup PR #1: superseded by the combined merge and no longer pending independently.
 
 Remaining D05 administrative work only:
-- update the local checkout to `main` at the merged SHA when convenient;
+- local checkout is already synchronized to merged `main` at `d25165a31e8a64e8f9814f0f58aa8366ffce2a0c`;
 - retain migration backups until explicit cleanup acceptance;
 - do not delete preservation/integration branches merely because the merge completed.
 
@@ -873,7 +873,7 @@ Use:
 - Central registry: `kriskingg/Dashboards`.
 - Current GitHub source refs were re-verified during this turnover.
 - OCI runtime observations remain timestamped audit evidence and must be re-verified before deployment-sensitive work.
-- D05 repository consolidation is merged and validated at `d25165a31e8a64e8f9814f0f58aa8366ffce2a0c`; only local-main sync and eventual backup cleanup remain administrative follow-up.
+- D05 repository consolidation is merged, validated, and the local Windows checkout is synchronized to `main` at `d25165a31e8a64e8f9814f0f58aa8366ffce2a0c`; only eventual migration-backup cleanup remains administrative follow-up.
 - D06 local preservation remains pending.
 - D01-D04 each have documented runtime/ownership/security/durability work still open.
 - `etf-invest-engine/main` is explicitly protected as live ETF/MTF production strategy/domain code.
