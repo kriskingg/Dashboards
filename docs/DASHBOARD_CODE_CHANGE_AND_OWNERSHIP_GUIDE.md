@@ -5,7 +5,7 @@
 files must be changed, which tests protect it, what runtime is affected, and
 whether the code belongs in its current repository**.
 
-This document is the canonical engineering decision map for D01-D04. The
+This document is the canonical engineering decision map for D01-D06. The
 `Dashboards` repository is a **documentation / ownership / decision registry**.
 It must not become a fifth runtime application repository.
 
@@ -17,6 +17,8 @@ It must not become a fifth runtime application repository.
 | D02 | MCX / Silver hedge paper research | Silver/MCX hedge research | `kriskingg/hedge-engine` / `main` | `src/hedge_engine/dashboard/*`, `src/hedge_engine/runtime/paper_loop.py` | **KEEP:** hedge-engine is the correct domain repo |
 | D03 | Live ETF/Kotak operator dashboard `/` | live ETF/MTF production | `kriskingg/etf-invest-engine`; intended authority `main`, observed deployment branch differs | `src/dashboard/*` and guarded live broker APIs | **KEEP:** dashboard is tightly coupled to live ETF safety/broker domain |
 | D04 | ETF Platform-v2 `/v2/` | future/live ETF operator platform | currently `etf-invest-engine` feature/deployed branch `platform-v2-v03-preimplementation-20260916` | `web/src/*`, `src/platform_v2/*`, `src/dashboard/spa.py` | **KEEP FOR NOW:** optional frontend split only after API contract + production branch are stable |
+| D05 | Mutual Funds Analytics / Tactical Research | mutual-fund analytics/research | `kriskingg/mf-analytics-source` / `main` | `app/frontend/src/*`, `app/backend/app/*` | **KEEP:** coherent independent analytics repo |
+| D06 | Personal Investment Tracker | personal portfolio/accounting | `kriskingg/investment-tracker-app` / `main` | `frontend/src/*`, `backend/app/*` | **KEEP:** already clean independent app repo |
 | G01 | Shared research HTTP gateway | shared D01/D02 presentation/ingress | runtime `/opt/chartink-paper/mcx-paper-research/mcx_paper/control_server.py`; Git authority not proven | static report serving + current MCX control API | **HIGH-PRIORITY EXTRACTION:** replace with a versioned, read-only shared gateway; remove mutating control from public origin |
 
 ## 2. Repository boundary rule
@@ -490,7 +492,39 @@ service boundary is created.
 
 ---
 
-# 7. G01 — Shared D01/D02 research serving layer
+# 7. D05 — Mutual Funds Analytics / Tactical Research
+
+Repository: `kriskingg/mf-analytics-source` / `main`.
+
+Primary UI source: `app/frontend/src/App.tsx` and the view components under
+`app/frontend/src/components/`. Backend authority is under
+`app/backend/app/`.
+
+Current startup script uses frontend port 5173 and backend port 8000. The README
+contains older/different backend-port documentation, so verify executable startup
+configuration before changes.
+
+**Repository decision: KEEP.** This is already a coherent independent
+mutual-fund analytics application.
+
+See [dashboards/D05-MUTUAL-FUNDS-ANALYTICS.md](dashboards/D05-MUTUAL-FUNDS-ANALYTICS.md).
+
+# 8. D06 — Personal Investment Tracker
+
+Repository: `kriskingg/investment-tracker-app` / `main`.
+
+Primary UI source: `frontend/src/App.tsx`, `frontend/src/pages/*`; backend
+authority: `backend/app/*`.
+
+Current `scripts/start-dev.ps1` uses frontend 5175 and backend 8005, even
+though the README still references 5173/8000.
+
+**Repository decision: KEEP.** The application is already correctly separated
+and localhost-only by design.
+
+See [dashboards/D06-INVESTMENT-TRACKER.md](dashboards/D06-INVESTMENT-TRACKER.md).
+
+# 9. G01 — Shared D01/D02 research serving layer
 
 ## 7.1 Current runtime
 
@@ -536,7 +570,7 @@ This split removes the odd situation where an old module named
 
 ---
 
-# 8. Recommended target repository layout
+# 10. Recommended target repository layout
 
 ## Decision A — extract NIFTY research
 
@@ -589,7 +623,7 @@ the ownership problem worse.
 
 ---
 
-# 9. Safe migration sequence with minimum runtime impact
+# 11. Safe migration sequence with minimum runtime impact
 
 ## Phase 0 — freeze and identify
 
@@ -643,7 +677,7 @@ Do not combine this with strategy tuning.
 
 ---
 
-# 10. Change-control checklist for every dashboard request
+# 12. Change-control checklist for every dashboard request
 
 Before implementing a dashboard change:
 
