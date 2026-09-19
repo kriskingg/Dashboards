@@ -1,4 +1,4 @@
-# Server 1 Runtime Verification — 2026-09-19
+# chartink-paper Runtime Verification — 2026-09-19
 
 **Server:** `chartink-paper`  
 **Documented public IP:** `80.225.234.65`  
@@ -22,7 +22,7 @@ architecture: x86-64
 virtualization: KVM/QEMU
 ```
 
-The public IP `80.225.234.65` remains the documented Server-2 address from the build/inventory records. The command set used in this audit did not independently print the public IPv4.
+The public IP `80.225.234.65` remains the documented `chartink-paper` address from the historical build/inventory records. The command set used in this audit did not independently print the public IPv4.
 
 ## 2. Shared serving and Cloudflare ingress
 
@@ -455,9 +455,9 @@ https://triumph-events-chair-problems.trycloudflare.com
 
 No evidence from this audit supports treating the shared HTTP/control server as the generator owner of both applications.
 
-## 6. Server-1 audit closure
+## 6. chartink-paper audit closure
 
-All requested Server-1 provenance questions are now resolved.
+All requested `chartink-paper` provenance questions are now resolved.
 
 D01:
 - executable NIFTY runtime source is proven current for the application runtime tree;
@@ -468,4 +468,4 @@ D02:
 - generated primary and published MCX pages matched byte-for-byte;
 - installed systemd unit differs only by CRLF versus LF line endings.
 
-No further Server-1 verification is required for dashboard ownership mapping.
+No further `chartink-paper` verification is required for dashboard ownership mapping.

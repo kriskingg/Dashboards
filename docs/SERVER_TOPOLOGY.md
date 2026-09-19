@@ -2,20 +2,20 @@
 
 This document records the physical/logical server placement of the known dashboard surfaces. It separates **server identity**, **ingress**, **serving process**, and **generator ownership**.
 
-## Two distinct OCI servers
+## Two distinct OCI hosts
 
-The current documentation identifies two different OCI VMs:
+The current documentation identifies two different OCI VMs. Current terminology uses hostnames, not ordinal labels such as "server 1" or "server 2":
 
 | Server role | Host identity | Public IP | Other known IP | Primary dashboard responsibility |
 |---|---|---:|---|---|
-| Paper/research Server 2 | `chartink-paper` | `80.225.234.65` | OCI private `10.0.0.71` | NIFTY paper research + MCX/Silver paper research serving/publishing |
+| Research host | `chartink-paper` | `80.225.234.65` | OCI private `10.0.0.71` | NIFTY paper research + MCX/Silver paper research serving/publishing |
 | Live ETF/Kotak server | `lakshmidevi` / Tailscale node `etf-trader` | `141.148.219.153` | Tailscale `100.120.194.42` at 2026-09-15 verification | Private ETF/Kotak live operator dashboard |
 
 These are **not the same VM**.
 
-The NIFTY Server-2 inventory explicitly states that `141.148.219.153` is outside the NIFTY paper-research project. The ETF platform documentation independently identifies `141.148.219.153 / lakshmidevi / etf-trader` as the live dashboard host.
+The historical NIFTY inventory for `chartink-paper` explicitly states that `141.148.219.153` is outside the NIFTY paper-research project. The ETF platform documentation independently identifies `141.148.219.153 / lakshmidevi / etf-trader` as the live dashboard host.
 
-## Server 2 — chartink-paper
+## chartink-paper — research host
 
 Verified build/inventory facts recorded in `kriskingg/etf-invest-engine`:
 
@@ -31,8 +31,8 @@ OS:                Ubuntu 24.04
 
 Relevant source records:
 
-- `docs/reports/SECOND_SERVER_BUILD_REPORT.md`
-- `nifty-options-paper-research/docs/SERVER2_INVENTORY.md`
+- `docs/reports/SECOND_SERVER_BUILD_REPORT.md` *(historical filename; refers to `chartink-paper`)*
+- `nifty-options-paper-research/docs/SERVER2_INVENTORY.md` *(historical filename; refers to `chartink-paper`)*
 
 ### D01 — NIFTY paper research
 
@@ -172,7 +172,7 @@ Until that runtime route trace is complete, D04 remains independently marked **P
 ## Cross-server relationship
 
 ```text
-SERVER 2 / PAPER RESEARCH
+CHARTINK-PAPER / PAPER RESEARCH
 chartink-paper
 80.225.234.65
   |
