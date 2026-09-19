@@ -6,7 +6,14 @@
 
 ## Purpose
 
-This is the private Kotak Neo trading/portfolio operator dashboard. It is a different operational boundary from the NIFTY options paper-research and MCX paper-research dashboards on `chartink-paper`.
+This is the private Kotak Neo trading/portfolio operator dashboard. It is a
+different operational boundary from the NIFTY options paper-research and MCX
+paper-research dashboards on `chartink-paper`.
+
+The owning branch, `kriskingg/etf-invest-engine main`, is the **live ETF/MTF
+production branch**, not merely a dashboard branch. It also owns the scheduled
+ETF strategy (`pair_1`, `pair_2`, `pair_3`), campaign accounting
+(`KnowYourPNL`), DynamoDB integration and production cron.
 
 The dashboard includes portfolio/holdings/positions, broker reconciliation, guarded manual derivative workflows, ETF-to-futures conversion surfaces, basket validation, and Silver automation/reference presentation.
 
@@ -212,3 +219,34 @@ Until it returns, the correct confidence is:
 SOURCE + NETWORK ARCHITECTURE PROVEN
 CURRENT DEPLOYED BYTE EQUIVALENCE PENDING
 ```
+
+## Data and recovery boundary
+
+Core live ETF strategy state is cloud/external-authoritative:
+
+```text
+AWS DynamoDB -> strategy quantities/BaseValue/campaign state + P&L lots
+OCI Vault    -> secrets
+GitHub       -> code/bootstrap/schedules
+Kotak        -> actual broker positions/orders
+Tailscale    -> network identity/grants
+```
+
+The host also has local operational state/config:
+
+```text
+/home/ubuntu/kotak/data/session_store.json
+/home/ubuntu/kotak/data/dashboard_runtime.env
+/home/ubuntu/kotak/data/dashboard_config.json
+/home/ubuntu/kotak/data/logs/
+/home/ubuntu/kotak/data/research/
+```
+
+A reboot normally preserves the boot disk. Total VM loss does not preserve all
+of those local files unless they are recreated or separately backed up.
+
+The older "zero state on disk" disaster-recovery statement in
+`etf-invest-engine` is now being corrected to mean **core live ETF strategy
+state is not disk-dependent**, not that the entire server is stateless.
+
+See [MASTER_SYSTEM_MAP.md](MASTER_SYSTEM_MAP.md).

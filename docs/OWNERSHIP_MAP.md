@@ -143,17 +143,34 @@ See [D02-mcx-silver-hedge.md](D02-mcx-silver-hedge.md) and [SERVER1_RUNTIME_VERI
 
 ---
 
-## D03 — ETF dashboard `/`
+## D03 — LIVE ETF/Kotak operator dashboard `/`
 
-Status: **pending**.
+**Source/network design status:** strongly documented.  
+**Fresh deployed-byte verification:** pending Server-B audit.
 
-URL under investigation:
+| Layer | Current documented value |
+|---|---|
+| URL | `https://etf-trader.tailabfd53.ts.net/` |
+| Purpose | live ETF/Kotak production operator dashboard |
+| Server | `lakshmidevi / etf-trader` |
+| Public OCI IP | `141.148.219.153` |
+| External ingress | Tailscale Serve, tailnet-only HTTPS TCP 443 |
+| Local origin | `127.0.0.1:8080` |
+| Application | `src.dashboard.app_pro:app` |
+| Checkout | `/home/ubuntu/kotak` |
+| Repository | `kriskingg/etf-invest-engine` |
+| Branch | `main` |
+| Branch role | **LIVE ETF/MTF production branch** |
+| General Internet exposure | designed **NO**; Tailscale-only + application authentication |
+| Fresh runtime proof | pending |
 
-```text
-https://etf-trader.tailabfd53.ts.net/
-```
+Important: `etf-invest-engine/main` also owns the scheduled live ETF/MTF
+strategy (`pair_1`, `pair_2`, `pair_3`, `KnowYourPNL`, DynamoDB campaign
+integration and cron). D03 is the operator surface for that production
+platform; it is not a research-only dashboard.
 
-No repo/service ownership should be inferred until server and source tracing is completed.
+See [D03-etf-kotak-private-dashboard.md](D03-etf-kotak-private-dashboard.md) and
+[MASTER_SYSTEM_MAP.md](MASTER_SYSTEM_MAP.md).
 
 ---
 
