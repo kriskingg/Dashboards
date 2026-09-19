@@ -39,6 +39,8 @@ Browser URL
 Start with [MASTER_SYSTEM_MAP.md](docs/MASTER_SYSTEM_MAP.md) for the four-URL,
 two-host, code/data/recovery/security/cleanup view.
 
+Track audit progress and outstanding evidence in [INFRASTRUCTURE_AUDIT_CHECKLIST.md](docs/INFRASTRUCTURE_AUDIT_CHECKLIST.md).
+
 Fresh `chartink-paper` evidence is in [CHARTINK_PAPER_RUNTIME_VERIFICATION_2026-09-19.md](docs/CHARTINK_PAPER_RUNTIME_VERIFICATION_2026-09-19.md).
 
 Fresh `lakshmidevi` evidence is in [LAKSHMIDEVI_RUNTIME_VERIFICATION_2026-09-19.md](docs/LAKSHMIDEVI_RUNTIME_VERIFICATION_2026-09-19.md).
