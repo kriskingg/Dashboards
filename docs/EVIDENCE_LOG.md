@@ -213,3 +213,281 @@ Runtime: /opt/chartink-paper/nifty-options-v2
 Serving layer: shared mcx_paper.control_server
 Ingress: Cloudflare quick tunnel
 ```
+
+
+---
+
+## 2026-09-19 — D02 MCX / Silver Hedge Source Ownership
+
+### Scope of this review
+
+This review used GitHub source plus the serving facts already recorded for D01. It did **not** directly inspect the OCI filesystem or systemd state on 2026-09-19.
+
+Therefore this entry proves source ownership and deployment intent, but does not claim that the current OCI checkout is byte-for-byte identical to the latest GitHub `main` branch.
+
+### Browser identity already recorded
+
+MCX research page:
+
+```text
+https://triumph-events-chair-problems.trycloudflare.com/mcx_latest.html
+```
+
+The existing dashboard registry records that this page shares the same quick tunnel, port 8765 serving layer, and report directory as D01.
+
+### Repository discovery
+
+Relevant repositories under `kriskingg` were inspected. The dedicated implementation repository is:
+
+```text
+kriskingg/hedge-engine
+default branch: main
+```
+
+The latest default-branch commit observed during this review was:
+
+```text
+e10eeeda6ea17a7a6c5bc62ad0877b01cf8ef071
+Merge pull request #3 from kriskingg/feat/position-control-modal-basket
+```
+
+### Deployment unit evidence
+
+File:
+
+```text
+kriskingg/hedge-engine
+deploy/systemd/hedge-engine-paper.service
+```
+
+The service contract runs:
+
+```text
+/opt/hedge-engine/.venv/bin/python -m hedge_engine.runtime.paper_loop
+```
+
+with:
+
+```text
+WorkingDirectory=/opt/hedge-engine
+PYTHONPATH=/opt/hedge-engine/src
+```
+
+and publishes:
+
+```text
+--publish-path /var/lib/chartink-paper/nifty-multi-shadow/reports/mcx_latest.html
+```
+
+This is direct source evidence that hedge-engine owns generation/publication of the MCX page.
+
+### Runtime source evidence
+
+`src/hedge_engine/runtime/paper_loop.py` defines:
+
+```text
+reports_dir = /var/lib/hedge-engine/reports
+published_report_path = /var/lib/chartink-paper/nifty-multi-shadow/reports/mcx_latest.html
+primary_report_path = /var/lib/hedge-engine/reports/mcx_latest.html
+```
+
+GitHub blob at review:
+
+```text
+paper_loop.py
+80a08dcd3fdf4ba07e67ca8ac4ed3e87cfad8b2b
+```
+
+### Dashboard renderer evidence
+
+Primary composition module:
+
+```text
+src/hedge_engine/dashboard/renderer.py
+```
+
+It composes the established dashboard from:
+
+```text
+src/hedge_engine/dashboard/renderer_core.py
+```
+
+and adds the next-action and position-control panels.
+
+Relevant GitHub blobs:
+
+```text
+renderer.py
+faf62c3ad8c26aa6bbdc6f9aed01a44bfa316d66
+
+renderer_core.py
+e2d997e7a5f8300d5fce0d756f024dc02afe481b
+```
+
+### Migration/runbook evidence
+
+`docs/MCX_RUNTIME_MIGRATION.md` explicitly records the target architecture:
+
+```text
+Code:  /opt/hedge-engine
+State: /var/lib/hedge-engine
+```
+
+It also explicitly identifies:
+
+```text
+https://triumph-events-chair-problems.trycloudflare.com/mcx_latest.html
+```
+
+as the MCX presentation URL and says the NIFTY options `/live_latest.html` runtime is a separate boundary.
+
+### Repository boundary evidence
+
+The `kriskingg/hedge-engine` README states that `kriskingg/etf-invest-engine` is read-only reference material for this project and that implementation changes belong in `kriskingg/hedge-engine`.
+
+This resolves the generator ownership question independently from the shared report path.
+
+### Cross-dashboard conclusion
+
+```text
+Shared ingress:
+triumph-events-chair-problems.trycloudflare.com
+
+Shared serving target:
+127.0.0.1:8765
+
+Shared report directory:
+/var/lib/chartink-paper/nifty-multi-shadow/reports
+
+NIFTY page:
+live_latest.html
+Generator owner: kriskingg/etf-invest-engine
+
+MCX page:
+mcx_latest.html
+Generator owner: kriskingg/hedge-engine
+```
+
+### Remaining runtime proof required
+
+To promote D02 from source-proven to fully runtime-proven, obtain a fresh OCI check of:
+
+```text
+/opt/hedge-engine git remote
+deployed branch
+deployed HEAD
+systemctl cat hedge-engine-paper.service
+hashes of deployed paper_loop.py / renderer.py / renderer_core.py
+mcx_latest.html freshness
+service active state
+```
+
+### Final evidence conclusion
+
+```text
+D02 source ownership: PROVEN
+Generator owner: kriskingg/hedge-engine
+Source branch: main
+Runtime deployment SHA: NOT RE-VERIFIED IN THIS REVIEW
+Serving layer: shared mcx_paper.control_server
+Ingress: shared Cloudflare quick tunnel
+```
+
+---
+
+## 2026-09-19 — Server 1 Final Byte-Level Closure
+
+### NIFTY runtime dashboard blob
+
+Direct server command:
+
+```text
+git hash-object analysis/nifty_multi_shadow/dashboard.py
+```
+
+returned:
+
+```text
+a6757e3087e643b0ac75f41ce993e371b3aac35b
+```
+
+The old tracked checkout copy returned:
+
+```text
+7a4a959784662ded8aec18b1c50c70585d2faa94
+```
+
+Fresh GitHub verification for the current production branch returned:
+
+```text
+branch:
+chatgpt/statistical-options-buying-basket-v1
+
+HEAD:
+f9a8fe8a22173fcda902bcbc2f8fd3a4da4defa5
+
+dashboard.py blob:
+a6757e3087e643b0ac75f41ce993e371b3aac35b
+```
+
+Therefore the executable runtime `dashboard.py` is exactly the current GitHub version even though the checkout HEAD remains `97f51a8...`.
+
+GitHub commit comparison `97f51a8... -> f9a8fe8...` changes only:
+
+```text
+nifty-options-paper-research/analysis/nifty_multi_shadow/dashboard.py
+nifty-options-paper-research/analysis/test_nifty_dashboard_v2.py
+```
+
+The runtime recursive comparison against the old tracked application tree reported only `dashboard.py` as different. The test file is outside the executable runtime source tree.
+
+Conclusion:
+
+```text
+NIFTY executable runtime source: CURRENT
+NIFTY checkout metadata: STALE/HYBRID
+```
+
+### MCX installed systemd unit classification
+
+Repository unit SHA-256:
+
+```text
+3d886c4fd79856f25a23719f2c8eed4746e88af15877df3711072b2e2e5c1852
+```
+
+Installed unit SHA-256:
+
+```text
+5a659e331364f5d49c7d34ee089f3e3e7595d20e633d9dfadd5da180c135f66c
+```
+
+A direct unified diff showed every logical line identical. Byte-level `cmp -l` showed the repository newline byte `0x0A` corresponds to `0x0D 0x0A` in the installed file.
+
+Classification:
+
+```text
+repository: LF line endings
+installed:  CRLF line endings
+semantic content: IDENTICAL
+```
+
+Therefore the systemd mismatch is non-semantic formatting drift only.
+
+### Server 1 final confidence
+
+```text
+D01 NIFTY:
+ownership             PROVEN
+runtime application   CURRENT
+checkout metadata     STALE/HYBRID
+
+D02 MCX:
+ownership             PROVEN
+tracked runtime       PROVEN_BYTE_IDENTICAL
+GitHub main           SAME DEPLOYED SHA
+published HTML        BYTE-IDENTICAL TO PRIMARY AT COMPARISON
+installed unit        SEMANTICALLY IDENTICAL; CRLF-ONLY DIFFERENCE
+```
+
+No further Server-1 ownership verification is required.
