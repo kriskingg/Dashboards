@@ -117,7 +117,7 @@ Relevant source records:
 - `docs/PLATFORM_VISION_AND_ROADMAP.md`
 - `scripts/start_dashboard.sh`
 
-### D03 — private ETF/Kotak dashboard root
+### D03 — private LIVE ETF/Kotak dashboard root
 
 Known source/runtime design:
 
@@ -141,7 +141,15 @@ main
 
 The startup script explicitly validates the exact Tailscale node name and refuses to recreate a public Cloudflare fallback.
 
-Source ownership and network architecture are strongly documented. A fresh byte-for-byte server verification is required before this registry claims the current deployed working tree exactly matches the current GitHub `main` HEAD.
+Source ownership and network architecture are strongly documented. The
+`etf-invest-engine/main` branch is also the live ETF/MTF production strategy
+branch, including Pair 1/2/3, KnowYourPNL, DynamoDB campaign integration and
+cron. A fresh byte-for-byte server verification is required before this registry
+claims the current deployed working tree exactly matches the current GitHub
+`main` HEAD.
+
+For ports, persistence, restart behavior, Internet exposure, backup gaps and
+cleanup candidates, see [MASTER_SYSTEM_MAP.md](MASTER_SYSTEM_MAP.md).
 
 ### D04 — `/v2/`
 
