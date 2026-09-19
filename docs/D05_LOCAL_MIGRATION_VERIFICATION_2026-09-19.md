@@ -171,6 +171,18 @@ main
 d25165a31e8a64e8f9814f0f58aa8366ffce2a0c
 ```
 
+Post-merge local synchronization was also verified:
+
+```text
+local workspace: D:\\Git_repos\\mf-analytics-source
+branch:          main
+HEAD:            d25165a31e8a64e8f9814f0f58aa8366ffce2a0c
+git diff --check: PASS
+tracked legacy D:\\Dhan\\Mutual_funds refs: 0
+```
+
+This closes the D05 source/code migration itself. Only migration-backup retirement remains subject to explicit cleanup approval.
+
 ## Data and Git safety
 
 The local D05 tree contains or may contain substantial non-source material, including:
