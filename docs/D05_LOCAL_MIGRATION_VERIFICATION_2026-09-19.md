@@ -11,7 +11,7 @@ This was a **local filesystem/runtime migration only**. It did not authorize bro
 ```text
 Repository:        kriskingg/mf-analytics-source
 Branch:            main
-Verified HEAD:     5366b9000d0f93af8e4e635b4fc551f0a85d0915
+Final merged HEAD: d25165a31e8a64e8f9814f0f58aa8366ffce2a0c
 Canonical path:    D:\Git_repos\mf-analytics-source
 Frontend:          http://127.0.0.1:5173
 Backend docs:      http://127.0.0.1:8000/docs
@@ -99,14 +99,16 @@ commit: 478e7a018ba0d587915445d4f7decfb056c63a0d
 
 The branch was pushed to GitHub and is the preservation point for the pre-integration local source. After that commit, the tracked working-tree content had no real diff from the preservation commit.
 
-A separate D05 path-cleanup branch/PR also exists:
+The preserved local-source branch and path-cleanup branch were later reconciled on:
 
 ```text
-branch: chatgpt/d05-path-cleanup-20260919
-PR:     #1
+integration branch: chatgpt/d05-integration-20260919
+validated head:     48ebe6f1f9e2bdfffbbb9356e58ff9e5a362abac
+combined PR:        #2
+final main:         d25165a31e8a64e8f9814f0f58aa8366ffce2a0c
 ```
 
-That work is not yet treated as merged authority. It must be reconciled with the preservation branch and validated before `main` changes.
+The combined result was reviewed and validated before merge. PR #1 is superseded by the combined merge; preservation and integration branches were retained.
 
 ## Python environment correction
 
@@ -143,6 +145,31 @@ FRONTEND: HTTP 200  -> http://127.0.0.1:5173
 ```
 
 Therefore D05 was operational from the new canonical physical path at the end of the migration verification.
+
+## Final post-integration validation
+
+Before combined PR #2 was merged, the integration head passed:
+
+```text
+git diff --check                    PASS
+tracked legacy D:\Dhan\Mutual_funds refs  0
+backend non-runtime tests           197 passed / 24 intentionally skipped
+lifecycle/runtime tests             3 passed
+frontend production build           PASS
+frontend lint                       0 errors / 19 warnings
+backend http://127.0.0.1:8000/docs HTTP 200
+frontend http://127.0.0.1:5173      HTTP 200
+legacy runtime process path         0
+working tree after validation       CLEAN
+```
+
+The final merged GitHub authority is:
+
+```text
+kriskingg/mf-analytics-source
+main
+d25165a31e8a64e8f9814f0f58aa8366ffce2a0c
+```
 
 ## Data and Git safety
 
