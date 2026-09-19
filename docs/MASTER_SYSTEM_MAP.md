@@ -4,6 +4,22 @@
 
 This is the single operational map for the dashboard systems currently identified across OCI and local workstations. D01-D04 are the two-OCI-host systems; D05-D06 are local Windows applications. It separates **URL**, **network exposure**, **server**, **port**, **serving process**, **generator/source code**, **persistent data**, **reboot behavior**, **server-loss behavior**, and **cleanup status**.
 
+## GitHub source-ref refresh — 2026-09-19
+
+The current GitHub heads were re-verified after the earlier runtime audits:
+
+| System | Repository/ref | Current GitHub head |
+|---|---|---|
+| D01 | `etf-invest-engine` / `chatgpt/statistical-options-buying-basket-v1` | `6a37957bf29f45c99b79e537f4698fbcdcca3f66` |
+| D02 | `hedge-engine` / `main` | `e10eeeda6ea17a7a6c5bc62ad0877b01cf8ef071` |
+| D03 intended authority | `etf-invest-engine` / `main` | `e52aa2ab7f8d4a260027778982b6abfe69203225` |
+| D03/D04 feature branch | `etf-invest-engine` / `platform-v2-v03-preimplementation-20260916` | `b2def17c7746656ede1a9514551fe276a21e7c40` |
+| D05 | `mf-analytics-source` / `main` | `5366b9000d0f93af8e4e635b4fc551f0a85d0915` |
+| D06 | `investment-tracker-app` / `main` | `8f3a24bc7f30ae10d6695a6a292447351a7db5e9` |
+
+These source-head updates do **not** replace timestamped deployed-runtime evidence below. In particular, D01 and D03/D04 GitHub branches have advanced since the earlier server observations. Re-verify the OCI checkout/runtime before any deployment-sensitive conclusion.
+
+
 ## Four URLs, two OCI hosts, three known application owners
 
 | ID | URL | Purpose | Server | External access | Local origin | Generator/source owner | Current confidence |
@@ -62,7 +78,8 @@ Source authority:
 ```text
 kriskingg/etf-invest-engine
 branch: chatgpt/statistical-options-buying-basket-v1
-current GitHub HEAD verified: f9a8fe8a22173fcda902bcbc2f8fd3a4da4defa5
+GitHub HEAD at the earlier runtime audit: f9a8fe8a22173fcda902bcbc2f8fd3a4da4defa5
+current GitHub branch head after later source-ref refresh: 6a37957bf29f45c99b79e537f4698fbcdcca3f66
 ```
 
 Deployment-layout caveat:
