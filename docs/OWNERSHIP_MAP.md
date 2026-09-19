@@ -139,14 +139,14 @@ The 2026-09-19 server audit proved all Git-tracked `/opt/hedge-engine` files byt
 
 The installed `/etc/systemd/system/hedge-engine-paper.service` differs from the repository copy only because the installed file uses CRLF line endings while the repository uses LF. The logical unit configuration is identical.
 
-See [D02-mcx-silver-hedge.md](D02-mcx-silver-hedge.md) and [SERVER1_RUNTIME_VERIFICATION_2026-09-19.md](SERVER1_RUNTIME_VERIFICATION_2026-09-19.md).
+See [D02-mcx-silver-hedge.md](D02-mcx-silver-hedge.md) and [CHARTINK_PAPER_RUNTIME_VERIFICATION_2026-09-19.md](CHARTINK_PAPER_RUNTIME_VERIFICATION_2026-09-19.md).
 
 ---
 
 ## D03 — LIVE ETF/Kotak operator dashboard `/`
 
 **Source/network design status:** strongly documented.  
-**Fresh deployed-byte verification:** pending Server-B audit.
+**Fresh deployed-byte verification:** pending `lakshmidevi` audit.
 
 | Layer | Current documented value |
 |---|---|
