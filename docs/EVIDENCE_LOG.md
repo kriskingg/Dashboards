@@ -395,7 +395,7 @@ Ingress: shared Cloudflare quick tunnel
 
 ---
 
-## 2026-09-19 — Server 1 Final Byte-Level Closure
+## 2026-09-19 — chartink-paper Final Byte-Level Closure
 
 ### NIFTY runtime dashboard blob
 
@@ -474,7 +474,7 @@ semantic content: IDENTICAL
 
 Therefore the systemd mismatch is non-semantic formatting drift only.
 
-### Server 1 final confidence
+### chartink-paper final confidence
 
 ```text
 D01 NIFTY:
@@ -490,4 +490,4 @@ published HTML        BYTE-IDENTICAL TO PRIMARY AT COMPARISON
 installed unit        SEMANTICALLY IDENTICAL; CRLF-ONLY DIFFERENCE
 ```
 
-No further Server-1 ownership verification is required.
+No further `chartink-paper` ownership verification is required.
