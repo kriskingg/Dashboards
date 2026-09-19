@@ -101,6 +101,8 @@ The path-cleanup work in PR #1 is intentionally still separate from the preserva
 
 Deep evidence: [../D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md](../D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md).
 
+Session continuation / turnover: [../D05_SESSION_TURNOVER_2026-09-19.md](../D05_SESSION_TURNOVER_2026-09-19.md).
+
 ## End-to-end local path
 
 ```text
