@@ -34,6 +34,9 @@ screeners, comparison tools and interactive charting.
 | Frontend root | `app/frontend/` |
 | Backend root | `app/backend/` |
 | Startup scripts | `app/scripts/` |
+| Preserved local-source branch | `preserve/d05-local-source-20260919` |
+| Preserved local-source commit | `478e7a018ba0d587915445d4f7decfb056c63a0d` |
+| Path-cleanup work | PR #1, branch `chatgpt/d05-path-cleanup-20260919`; pending integration/testing, not yet `main` |
 
 ## 2026-09-19 local migration verification
 
@@ -59,6 +62,42 @@ Verified after migration:
 Temporary migration backups may exist until cleanup is explicitly approved. They are safety copies, not active code/runtime authorities.
 
 Large local NAV/market/bhavcopy data, logs, `.venv`, `node_modules`, ZIP deliverables and generated artifacts may physically coexist inside the working tree. Do **not** use blind `git add .` / `git add -A`; audit ignore/staging scope first.
+
+## Post-migration source preservation and Git boundary audit
+
+After the filesystem/runtime migration, the local D05 working tree was audited before any broad staging.
+
+Verified durable results:
+
+- the meaningful unpublished local source consisted of 10 tracked source changes plus one new regression test and two application assets;
+- those 13 files were explicitly staged, checked and committed as `478e7a018ba0d587915445d4f7decfb056c63a0d`;
+- the commit was pushed to `preserve/d05-local-source-20260919`, so the pre-integration local source is now recoverable from GitHub;
+- after preservation, the tracked working-tree content had no real diff from that preservation commit;
+- large NAV/history, bhav/market, Parquet, database, logs, environments, dependency trees, ZIP/back-up and generated-result material remains local/non-source;
+- the audit found no Git-tracked file larger than 20 MB;
+- plain `.csv` is not globally ignored, so any future CSV must be classified before staging;
+- local-only generated backup/kit/result directories are excluded locally and are not treated as canonical source.
+
+The intended repository boundary is:
+
+```text
+GitHub
+  -> application source
+  -> tests
+  -> scripts
+  -> SQL/schema
+  -> current documentation
+  -> small required assets/config/reference material
+
+Local only
+  -> NAV/history and bhav/market datasets
+  -> Parquet and live database state
+  -> logs/caches
+  -> virtual environments and node_modules
+  -> ZIPs/backups/generated results
+```
+
+The path-cleanup work in PR #1 is intentionally still separate from the preservation commit. The next gate is to integrate both histories, resolve any overlap deliberately, run backend/frontend validation, verify old-path references are gone, and only then merge to `main`.
 
 Deep evidence: [../D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md](../D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md).
 
