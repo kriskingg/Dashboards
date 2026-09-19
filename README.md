@@ -64,6 +64,8 @@ The 36-repository account-wide UI scan is recorded in [ACCOUNT_WIDE_UI_SCAN_2026
 
 The verified D05 local migration from the legacy workspace into the canonical Git workspace is recorded in [D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md](docs/D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md).
 
+For continuation across ChatGPT sessions, use [D05_SESSION_TURNOVER_2026-09-19.md](docs/D05_SESSION_TURNOVER_2026-09-19.md) as the current D05 handoff page. It records the preserved source branch, pending path-cleanup integration, local/GitHub boundaries, safety backups and the exact next validation gates.
+
 See [OWNERSHIP_MAP.md](docs/OWNERSHIP_MAP.md) for the evidence-oriented master table and [SERVER_TOPOLOGY.md](docs/SERVER_TOPOLOGY.md) for physical/logical server placement.
 
 ## Why this registry exists
