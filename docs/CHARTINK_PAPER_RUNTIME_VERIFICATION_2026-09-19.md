@@ -578,10 +578,14 @@ The service itself is disabled, but
 status=203/EXEC
 ```
 
-The timer therefore makes the disabled service relevant. Do not call it harmless
-legacy residue yet. First verify the deployed executable path and decide whether
-this replay is still part of the intended pipeline; then either repair it or
-retire timer+service together under an approved cleanup.
+The timer therefore makes the disabled service relevant. The follow-up audit
+also proved the target script exists with a valid `#!/usr/bin/env bash`
+shebang but mode `0664` (no executable bit), while the working multi-shadow
+script is mode `0755`. This directly explains systemd `203/EXEC`.
+
+Classify the immediate defect as **deployed executable permission missing**.
+Still decide separately whether this older replay path should be repaired or
+retired; do not simply chmod it as part of the architecture audit.
 
 ### nifty-multi-shadow-evidence-exporter.service — evidence-delivery defect
 
@@ -637,11 +641,12 @@ the same filesystem and do not create a separate failure domain.
 Two inputs remain before declaring the chartink-paper durability audit fully
 closed:
 
-1. `/var/lib/chartink-paper` reports only 4 KiB even though live processes use
-   `nifty-multi-shadow/reports` and `mcx-paper/control.json`. The audit's
-   non-following `find` did not enumerate NIFTY mutable data. Resolve the
-   symlink/physical targets and measure them before finalizing NIFTY raw-data
-   durability.
+1. The follow-up audit proved `/var/lib/chartink-paper` is mode `0700`,
+   owned by `chartink-paper`. Because the audit command ran as `ubuntu`, it
+   could not traverse that tree. The previous 4 KiB result was therefore a
+   permissions artifact, not proof of symlinks. If raw NIFTY durability must be
+   fully closed, rerun only the inventory portion as root or the
+   `chartink-paper` service user.
 2. OCI boot-volume backup policy and existing boot-volume backups remain
    **UNKNOWN** from the host because OCI CLI is not installed. Verify from OCI
    control-plane evidence rather than installing tooling solely for the audit.
