@@ -30,7 +30,7 @@ The account contains **6 confirmed dashboard systems**:
 | D02 | MCX / Silver Hedge Research | `kriskingg/hedge-engine` | `chartink-paper` OCI |
 | D03 | ETF / Kotak Private Operator | `kriskingg/etf-invest-engine` | `lakshmidevi` OCI |
 | D04 | ETF Platform-v2 | `kriskingg/etf-invest-engine` | `lakshmidevi` OCI |
-| D05 | Mutual Funds Analytics / Tactical Research | `kriskingg/mf-analytics-source` | local Windows workspace |
+| D05 | Mutual Funds Analytics / Tactical Research | `kriskingg/mf-analytics-source` | local Windows, canonical `D:\Git_repos\mf-analytics-source` |
 | D06 | Personal Investment Tracker | `kriskingg/investment-tracker-app` | local Windows, localhost-only |
 
 ### Additional web applications / UI tools not counted as dashboards
@@ -183,3 +183,8 @@ Repeat this account-wide scan when:
 
 Do not increment the dashboard count merely because a new route, tab, feature
 branch or component is added to an existing dashboard.
+
+
+## D05 post-scan migration update — 2026-09-19
+
+After this account-wide source scan, D05 was safely consolidated from the legacy `D:\Dhan\Mutual_funds` workspace into the canonical physical Git working copy at `D:\Git_repos\mf-analytics-source`. Git branch/HEAD were preserved, tracked old-versus-new D05 content compared with zero differences, the Python environment was rebuilt at the new location, and backend/frontend HTTP 200 checks passed. See [D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md](D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md).

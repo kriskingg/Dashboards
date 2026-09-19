@@ -496,6 +496,8 @@ service boundary is created.
 
 Repository: `kriskingg/mf-analytics-source` / `main`.
 
+Canonical local workspace: `D:\Git_repos\mf-analytics-source` (verified physical directory after the 2026-09-19 migration; legacy `D:\Dhan\Mutual_funds` is no longer the runtime/code authority).
+
 Primary UI source: `app/frontend/src/App.tsx` and the view components under
 `app/frontend/src/components/`. Backend authority is under
 `app/backend/app/`.

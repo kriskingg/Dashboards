@@ -14,7 +14,7 @@ screeners, comparison tools and interactive charting.
 |---|---|
 | Dashboard ID | D05 |
 | Host | local Windows workstation |
-| Documented workspace | `D:\Dhan\Mutual_funds` |
+| Canonical workspace | `D:\Git_repos\mf-analytics-source` |
 | Frontend | React + TypeScript + Vite |
 | Frontend URL from current startup script | `http://localhost:5173` |
 | Backend | FastAPI |
@@ -22,6 +22,7 @@ screeners, comparison tools and interactive charting.
 | Database | PostgreSQL |
 | OCI dependency | none proven |
 | Public URL | none proven |
+| Legacy workspace | `D:\Dhan\Mutual_funds` — retired as runtime authority after 2026-09-19 migration |
 
 ## Source ownership
 
@@ -33,6 +34,33 @@ screeners, comparison tools and interactive charting.
 | Frontend root | `app/frontend/` |
 | Backend root | `app/backend/` |
 | Startup scripts | `app/scripts/` |
+
+## 2026-09-19 local migration verification
+
+D05 was migrated from the legacy local workspace into the canonical Git workspace:
+
+```text
+OLD runtime/workspace: D:\Dhan\Mutual_funds
+NEW canonical path:    D:\Git_repos\mf-analytics-source
+```
+
+Verified after migration:
+
+- `D:\Git_repos` is a real Windows directory, not a junction/reparse-point alias;
+- repository remote remains `https://github.com/kriskingg/mf-analytics-source.git`;
+- branch remains `main`;
+- HEAD remains `5366b9000d0f93af8e4e635b4fc551f0a85d0915`;
+- all old-source files were present in the new destination during migration verification;
+- D05 tracked-file old-versus-new comparison reported **0 differences**;
+- `.venv` was rebuilt so `sys.executable` and `sys.prefix` resolve under `D:\Git_repos\mf-analytics-source`;
+- `http://127.0.0.1:8000/docs` returned HTTP 200;
+- `http://127.0.0.1:5173` returned HTTP 200.
+
+Temporary migration backups may exist until cleanup is explicitly approved. They are safety copies, not active code/runtime authorities.
+
+Large local NAV/market/bhavcopy data, logs, `.venv`, `node_modules`, ZIP deliverables and generated artifacts may physically coexist inside the working tree. Do **not** use blind `git add .` / `git add -A`; audit ignore/staging scope first.
+
+Deep evidence: [../D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md](../D05_LOCAL_MIGRATION_VERIFICATION_2026-09-19.md).
 
 ## End-to-end local path
 
